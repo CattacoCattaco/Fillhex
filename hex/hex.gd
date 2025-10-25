@@ -10,7 +10,7 @@ const COLORS: Array[Color] = [
 	Color(0.7, 1, 0.7),
 	Color(0.5, 1, 0.8),
 	Color(0.5, 0.9, 1),
-	Color(0.6, 0.8, 1),
+	Color(0.55, 0.75, 1),
 	Color(0.7, 0.7, 1),
 	Color(0.85, 0.65, 1),
 	Color(1, 0.7, 0.9),
@@ -37,7 +37,7 @@ func _draw() -> void:
 	
 	draw_colored_polygon(corners, COLORS[number])
 	
-	draw_polyline(corners, Color.BLACK, 5)
+	draw_polyline(corners, Color.BLACK, max(scale_factor * 0.1, 3))
 	
 	if not label:
 		label = Label.new()
@@ -61,7 +61,7 @@ func _draw() -> void:
 		label.text = ""
 
 
-func _input(event: InputEvent) -> void:
+func _gui_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT:
 			if event.pressed:
