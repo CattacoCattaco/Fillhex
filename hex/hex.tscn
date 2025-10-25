@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3 uid="uid://xiqckn5xgt7c"]
+
+[ext_resource type="Script" uid="uid://iyhu8lg46teu" path="res://hex/hex.gd" id="1_4b57h"]
+
+[node name="Hex" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 100.0
+offset_bottom = 87.0
+script = ExtResource("1_4b57h")
+number = 10
