@@ -35,11 +35,11 @@ func _draw() -> void:
 	for pos in grid_data:
 		var hex := Hex.new()
 		
+		hex.number = grid_data[pos]
+		
 		add_child(hex)
 		grid_hexes[pos] = hex
 		
 		hex.size = hex_size
-		
-		hex.number = grid_data[pos]
 		
 		hex.position = center_hex_position + right_vector * pos.x + up_vector * pos.y
