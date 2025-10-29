@@ -2,6 +2,13 @@
 class_name Hex
 extends Control
 
+enum State {
+	NORMAL,
+	HOVERED,
+	PRESSED,
+	HOVERED_PRESSED,
+}
+
 const COLORS: Array[Color] = [
 	Color(0.6, 0.6, 0.6),
 	Color(1, 0.6, 0.75),
@@ -30,9 +37,27 @@ const HOVERED_COLORS: Array[Color] = [
 	Color(0.8, 0.56, 0.72),
 ]
 
+const PRESSED_COLORS: Array[Color] = [
+	Color(0.2, 0.2, 0.2),
+	Color(0.64, 0.384, 0.4),
+	Color(0.64, 0.448, 0.416),
+	Color(0.64, 0.576, 0.416),
+	Color(0.416, 0.64, 0.416),
+	Color(0.32, 0.64, 0.512),
+	Color(0.32, 0.576, 0.64),
+	Color(0.352, 0.48, 0.64),
+	Color(0.448, 0.448, 0.64),
+	Color(0.544, 0.416, 0.64),
+	Color(0.64, 0.448, 0.576),
+]
+
+const BLACK = Color.BLACK
+
+
 @export var number: int = 1:
 	set(value):
 		number = value
+		color = get_state_color(state)
 		queue_redraw()
 
 @export var given: bool = true:
@@ -52,12 +77,15 @@ const HOVERED_COLORS: Array[Color] = [
 		queue_redraw()
 
 
+var state: State = State.NORMAL:
+	set(value):
+		state = value
+		queue_redraw()
+
 var zoom_factor: float = 1.0:
 	set(value):
 		zoom_factor = value
 		queue_redraw()
-
-var label: Label
 
 var zoom_tween: Tween
 
@@ -74,22 +102,22 @@ func _draw() -> void:
 	
 	draw_colored_polygon(corners, color)
 	
-	draw_polyline(corners, Color.BLACK, max(scale_factor * 0.1, 3))
-	
+	draw_polyline(corners, BLACK, max(scale_factor * 0.1, 3))
 	
 	if number != 0:
 		var font: Font = get_theme_default_font()
 		var font_size: int = floori(scale_factor * 0.7 * zoom_factor)
+		var text_width: int = floori(
+				font.get_string_size(str(number), HORIZONTAL_ALIGNMENT_LEFT, -1, font_size).x)
+		
 		var hex_center := Vector2(scale_factor, scale_factor * sqrt(3) / 2)
-		var character_size := font.get_char_size("2".unicode_at(0), font_size)
-		var char_pos := Vector2(hex_center.x - character_size.x / 2, hex_center.y + font_size / 2.0)
-		char_pos -= Vector2(0, 4)
-		draw_char(font, char_pos, str(number), font_size, Color.BLACK)
+		var text_pos := Vector2(hex_center.x - text_width / 2.0, hex_center.y + font_size / 2.0 - 4)
+		draw_string(font, text_pos, str(number), HORIZONTAL_ALIGNMENT_LEFT, -1, font_size, BLACK)
 		
 		if given:
-			var underline_start := char_pos + Vector2(0, 5)
-			var underline_end := char_pos + Vector2(character_size.x, 5)
-			draw_line(underline_start, underline_end, Color.BLACK, 5)
+			var underline_start := text_pos + Vector2(0, 5)
+			var underline_end := text_pos + Vector2(text_width, 5)
+			draw_line(underline_start, underline_end, BLACK, 5)
 
 
 func _gui_input(event: InputEvent) -> void:
@@ -106,11 +134,16 @@ func _mouse_entered() -> void:
 	if given:
 		return
 	
+	if state == State.NORMAL:
+		state = State.HOVERED
+	elif state == State.PRESSED:
+		state = State.HOVERED_PRESSED
+	
 	if zoom_tween:
 		zoom_tween.kill()
 	zoom_tween = create_tween()
 	
-	zoom_tween.tween_property(self, "color", HOVERED_COLORS[number], 0.1)
+	zoom_tween.tween_property(self, "color", get_state_color(state), 0.1)
 	zoom_tween.tween_property(self, "zoom_factor", 1.1, 0.15)
 	z_index = 5
 
@@ -119,12 +152,17 @@ func _mouse_exited() -> void:
 	if given:
 		return
 	
+	if state == State.HOVERED:
+		state = State.NORMAL
+	elif state == State.HOVERED_PRESSED:
+		state = State.PRESSED
+	
 	if zoom_tween:
 		zoom_tween.kill()
 	zoom_tween = create_tween()
 	
 	zoom_tween.tween_property(self, "zoom_factor", 1.0, 0.15)
-	zoom_tween.tween_property(self, "color", COLORS[number], 0.1)
+	zoom_tween.tween_property(self, "color", get_state_color(state), 0.1)
 	zoom_tween.tween_callback(reset_z)
 	z_index = 4
 
@@ -162,6 +200,18 @@ func get_hex_zoomed() -> PackedVector2Array:
 		zoomed[i] = zoomed[i] * zoom_factor + offset
 	
 	return zoomed
+
+
+func get_state_color(_state) -> Color:
+	match _state:
+		State.NORMAL:
+			return COLORS[number]
+		State.HOVERED:
+			return HOVERED_COLORS[number]
+		State.PRESSED, State.HOVERED_PRESSED:
+			return PRESSED_COLORS[number]
+	
+	return BLACK
 
 
 func get_scale_factor() -> float:
