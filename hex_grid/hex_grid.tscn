@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://bbtgxqjrvxg6l"]
+[gd_scene load_steps=3 format=3 uid="uid://bbtgxqjrvxg6l"]
 
 [ext_resource type="Script" uid="uid://b4t7wf8xupe5d" path="res://hex_grid/hex_grid.gd" id="1_7uwje"]
+[ext_resource type="Resource" uid="uid://co6bw0j12ftap" path="res://level/data/level_0.tres" id="2_mgi8c"]
 
 [node name="HexGrid" type="Control"]
 layout_mode = 3
@@ -10,14 +11,6 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_7uwje")
-grid_data = Dictionary[Vector2i, int]({
-Vector2i(-1, 0): 5,
-Vector2i(-1, 1): 5,
-Vector2i(0, -1): 5,
-Vector2i(0, 0): 5,
-Vector2i(0, 1): 2,
-Vector2i(1, -1): 5,
-Vector2i(1, 0): 2
-})
+level = ExtResource("2_mgi8c")
 hex_width = 150
 metadata/_custom_type_script = "uid://b4t7wf8xupe5d"

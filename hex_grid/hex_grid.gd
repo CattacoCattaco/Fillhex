@@ -2,9 +2,9 @@
 class_name HexGrid
 extends Control
 
-@export var grid_data: Dictionary[Vector2i, int]:
+@export var level: LevelData:
 	set(value):
-		grid_data = value
+		level = value
 		queue_redraw()
 
 @export var hex_width: int = 100:
@@ -32,10 +32,11 @@ func _draw() -> void:
 	var up_vector := Vector2(0, -hex_width / 2.0 * sqrt(3))
 	var right_vector := Vector2(3 * hex_width / 4.0, -hex_width / 4.0 * sqrt(3))
 	
-	for pos in grid_data:
+	for pos in level.hexes:
 		var hex := Hex.new()
 		
-		hex.number = grid_data[pos]
+		hex.number = level.hexes[pos]
+		hex.given = hex.number != 0
 		
 		add_child(hex)
 		grid_hexes[pos] = hex
