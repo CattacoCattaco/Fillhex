@@ -35,16 +35,22 @@ const HOVERED_COLORS: Array[Color] = [
 		number = value
 		queue_redraw()
 
+@export var given: bool = true:
+	set(value):
+		given = value
+		queue_redraw()
 
 @export var update: bool = false:
 	set(value):
 		update = false
 		queue_redraw()
 
+
 @onready var color: Color = COLORS[number]:
 	set(value):
 		color = value
 		queue_redraw()
+
 
 var zoom_factor: float = 1.0:
 	set(value):
@@ -52,6 +58,8 @@ var zoom_factor: float = 1.0:
 		queue_redraw()
 
 var label: Label
+
+var zoom_tween: Tween
 
 
 func _ready() -> void:
@@ -68,32 +76,26 @@ func _draw() -> void:
 	
 	draw_polyline(corners, Color.BLACK, max(scale_factor * 0.1, 3))
 	
-	if not label:
-		label = Label.new()
-		
-		add_child(label)
-		
-		label.label_settings = LabelSettings.new()
-	
-	label.label_settings.font_color = Color.BLACK
-	label.label_settings.font_size = floori(scale_factor * 0.7 * zoom_factor)
-	
-	label.size.x = scale_factor * 2
-	label.size.y = scale_factor * sqrt(3)
-	
-	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	
 	if number != 0:
-		label.text = str(number)
-	else:
-		label.text = ""
+		var font: Font = get_theme_default_font()
+		var font_size: int = floori(scale_factor * 0.7 * zoom_factor)
+		var hex_center := Vector2(scale_factor, scale_factor * sqrt(3) / 2)
+		var character_size := font.get_char_size("2".unicode_at(0), font_size)
+		var char_pos := Vector2(hex_center.x - character_size.x / 2, hex_center.y + font_size / 2.0)
+		char_pos -= Vector2(0, 4)
+		draw_char(font, char_pos, str(number), font_size, Color.BLACK)
+		
+		if given:
+			var underline_start := char_pos + Vector2(0, 5)
+			var underline_end := char_pos + Vector2(character_size.x, 5)
+			draw_line(underline_start, underline_end, Color.BLACK, 5)
 
 
 func _gui_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT:
-			if event.pressed:
+			if event.pressed and not given:
 				if number < len(COLORS) - 1:
 					number += 1
 				else:
@@ -101,17 +103,29 @@ func _gui_input(event: InputEvent) -> void:
 
 
 func _mouse_entered() -> void:
-	var tween: Tween = create_tween()
-	tween.tween_property(self, "color", HOVERED_COLORS[number], 0.1)
-	tween.tween_property(self, "zoom_factor", 1.1, 0.15)
+	if given:
+		return
+	
+	if zoom_tween:
+		zoom_tween.kill()
+	zoom_tween = create_tween()
+	
+	zoom_tween.tween_property(self, "color", HOVERED_COLORS[number], 0.1)
+	zoom_tween.tween_property(self, "zoom_factor", 1.1, 0.15)
 	z_index = 5
 
 
 func _mouse_exited() -> void:
-	var tween: Tween = create_tween()
-	tween.tween_property(self, "zoom_factor", 1.0, 0.15)
-	tween.tween_property(self, "color", COLORS[number], 0.1)
-	tween.tween_callback(reset_z)
+	if given:
+		return
+	
+	if zoom_tween:
+		zoom_tween.kill()
+	zoom_tween = create_tween()
+	
+	zoom_tween.tween_property(self, "zoom_factor", 1.0, 0.15)
+	zoom_tween.tween_property(self, "color", COLORS[number], 0.1)
+	zoom_tween.tween_callback(reset_z)
 	z_index = 4
 
 
