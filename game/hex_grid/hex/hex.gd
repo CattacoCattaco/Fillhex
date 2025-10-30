@@ -223,10 +223,6 @@ func select_deselect() -> void:
 	tween_to_state()
 
 
-func reset_z() -> void:
-	z_index = 0
-
-
 func get_hex() -> PackedVector2Array:
 	var scale_factor: float = get_scale_factor()
 	
@@ -289,7 +285,7 @@ func get_state_zoom(_state) -> float:
 func get_state_z(_state) -> int:
 	match _state:
 		State.NORMAL:
-			return 1
+			return 0
 		State.HOVERED:
 			return 5
 		State.SELECTED, State.HOVERED_SELECTED:

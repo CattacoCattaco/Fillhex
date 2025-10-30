@@ -11,23 +11,32 @@ const ORTHOGONALS: Array[Vector2i] = [
 	Vector2i(-1, 0),
 ]
 
-@export var level: LevelData:
-	set(value):
-		level = value
-		queue_redraw()
+@export var level_manager: LevelManager
 
 @export var update: bool = false:
 	set(value):
 		update = false
 		queue_redraw()
 
+var level: LevelData:
+	set(value):
+		level = value
+		hex_data = {}
+		queue_redraw()
+
 var grid_hexes: Dictionary[Vector2i, Hex] = {}
 var hex_data: Dictionary[Vector2i, HexData] = {}
 
 var selected_hex: Hex
+var in_setup: bool = false
 
 
 func _draw() -> void:
+	if not level:
+		return
+	
+	in_setup = true
+	
 	for pos in grid_hexes:
 		grid_hexes[pos].queue_free()
 	
@@ -97,6 +106,8 @@ func _draw() -> void:
 		hex.size = hex_size
 		
 		hex.position = center_hex_position + right_vector * pos.x + up_vector * pos.y
+	
+	in_setup = false
 
 
 func _gui_input(event: InputEvent) -> void:
@@ -107,6 +118,9 @@ func _gui_input(event: InputEvent) -> void:
 
 
 func check_for_solution() -> void:
+	if in_setup:
+		return
+	
 	var unchecked_hexes: Array[Vector2i] = []
 	
 	for pos in grid_hexes:
@@ -125,6 +139,7 @@ func check_for_solution() -> void:
 		for pos in group:
 			unchecked_hexes.erase(pos)
 	
+	level_manager.next_level()
 	print("You win!")
 
 

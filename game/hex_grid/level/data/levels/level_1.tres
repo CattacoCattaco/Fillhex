@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="LevelData" load_steps=2 format=3 uid="uid://cjax5h5ovghcy"]
+
+[ext_resource type="Script" uid="uid://hu5ar83kekht" path="res://game/hex_grid/level/data/level_data.gd" id="1_vsc0m"]
+
+[resource]
+script = ExtResource("1_vsc0m")
+hexes = Dictionary[Vector2i, int]({
+Vector2i(-1, 0): 4,
+Vector2i(-1, 1): 0,
+Vector2i(0, -1): 0,
+Vector2i(0, 0): 3,
+Vector2i(0, 1): 0,
+Vector2i(1, -1): 0,
+Vector2i(1, 0): 0
+})
+metadata/_custom_type_script = "uid://hu5ar83kekht"
