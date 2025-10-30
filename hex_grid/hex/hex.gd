@@ -146,13 +146,17 @@ func _input(event: InputEvent) -> void:
 			number = 10
 		elif event.is_action_pressed("hex_clear"):
 			number = 0
+		elif event.is_action_pressed("hex_deselect"):
+			select_deselect()
 
 
 func _gui_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton:
-		if event.button_index == MOUSE_BUTTON_LEFT:
-			if event.pressed and not given:
+		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+			if not given:
 				select_deselect()
+			elif hex_grid.selected_hex:
+				hex_grid.selected_hex.select_deselect()
 
 
 func _mouse_entered() -> void:
@@ -164,8 +168,7 @@ func _mouse_entered() -> void:
 	elif state == State.SELECTED:
 		state = State.HOVERED_SELECTED
 	
-	if not is_selected():
-		tween_to_state()
+	tween_to_state()
 
 
 func _mouse_exited() -> void:
@@ -177,8 +180,7 @@ func _mouse_exited() -> void:
 	elif state == State.HOVERED_SELECTED:
 		state = State.SELECTED
 	
-	if not is_selected():
-		tween_to_state()
+	tween_to_state()
 
 
 func _has_point(point: Vector2) -> bool:
@@ -271,7 +273,7 @@ func get_state_zoom(_state) -> float:
 		State.NORMAL:
 			return 1.0
 		State.SELECTED, State.HOVERED_SELECTED, State.HOVERED:
-			return 1.1
+			return 1.05
 	
 	return 1.0
 

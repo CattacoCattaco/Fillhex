@@ -49,3 +49,10 @@ func _draw() -> void:
 		hex.size = hex_size
 		
 		hex.position = center_hex_position + right_vector * pos.x + up_vector * pos.y
+
+
+func _gui_input(event: InputEvent) -> void:
+	if event is InputEventMouseButton:
+		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+			if selected_hex:
+				selected_hex.select_deselect()
