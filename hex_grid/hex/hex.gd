@@ -57,12 +57,14 @@ const BLACK = Color.BLACK
 @export var number: int = 1:
 	set(value):
 		number = value
-		color = get_state_color(state)
+		hex_grid.hex_data[pos].number = number
 		queue_redraw()
+		tween_to_state()
 
 @export var given: bool = true:
 	set(value):
 		given = value
+		hex_grid.hex_data[pos].given = given
 		queue_redraw()
 
 @export var update: bool = false:
@@ -71,7 +73,7 @@ const BLACK = Color.BLACK
 		queue_redraw()
 
 
-@onready var color: Color = COLORS[number]:
+@onready var color: Color = get_state_color(state):
 	set(value):
 		color = value
 		queue_redraw()
@@ -80,6 +82,7 @@ const BLACK = Color.BLACK
 var state: State = State.NORMAL:
 	set(value):
 		state = value
+		hex_grid.hex_data[pos].state = state
 		queue_redraw()
 
 var zoom_factor: float = 1.0:
@@ -90,6 +93,7 @@ var zoom_factor: float = 1.0:
 var zoom_tween: Tween
 
 var hex_grid: HexGrid
+var pos: Vector2i
 
 
 func _ready() -> void:
@@ -119,7 +123,7 @@ func _draw() -> void:
 		if given:
 			var underline_start := text_pos + Vector2(0, 5)
 			var underline_end := text_pos + Vector2(text_width, 5)
-			draw_line(underline_start, underline_end, BLACK, 5)
+			draw_line(underline_start, underline_end, BLACK, max(scale_factor * 0.06, 2))
 
 
 func _input(event: InputEvent) -> void:

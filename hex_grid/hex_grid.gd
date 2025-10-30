@@ -13,6 +13,7 @@ extends Control
 		queue_redraw()
 
 var grid_hexes: Dictionary[Vector2i, Hex] = {}
+var hex_data: Dictionary[Vector2i, HexData] = {}
 
 var selected_hex: Hex
 
@@ -64,9 +65,22 @@ func _draw() -> void:
 	for pos in level.hexes:
 		var hex := Hex.new()
 		
-		hex.number = level.hexes[pos]
-		hex.given = hex.number != 0
+		if not hex_data.has(pos):
+			var number: int = level.hexes[pos]
+			var state: Hex.State = Hex.State.NORMAL
+			var is_given: bool = level.hexes[pos] != 0
+			
+			hex_data[pos] = HexData.new(number, state, is_given)
+		
 		hex.hex_grid = self
+		hex.pos = pos
+		
+		hex.number = hex_data[pos].number
+		hex.state = hex_data[pos].state
+		hex.given = hex_data[pos].given
+		
+		if hex.is_selected():
+			selected_hex = hex
 		
 		add_child(hex)
 		grid_hexes[pos] = hex
