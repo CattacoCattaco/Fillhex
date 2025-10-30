@@ -19,12 +19,16 @@ extends Control
 
 var grid_hexes: Dictionary[Vector2i, Hex] = {}
 
+var selected_hex: Hex
+
 
 func _draw() -> void:
 	for pos in grid_hexes:
 		grid_hexes[pos].queue_free()
 	
 	grid_hexes = {}
+	
+	selected_hex = null
 	
 	var hex_size := Vector2i(hex_width, ceili(hex_width * sqrt(3) / 2))
 	
@@ -37,6 +41,7 @@ func _draw() -> void:
 		
 		hex.number = level.hexes[pos]
 		hex.given = hex.number != 0
+		hex.hex_grid = self
 		
 		add_child(hex)
 		grid_hexes[pos] = hex

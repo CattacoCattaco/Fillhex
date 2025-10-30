@@ -5,12 +5,12 @@ extends Control
 enum State {
 	NORMAL,
 	HOVERED,
-	PRESSED,
-	HOVERED_PRESSED,
+	SELECTED,
+	HOVERED_SELECTED,
 }
 
 const COLORS: Array[Color] = [
-	Color(0.6, 0.6, 0.6),
+	Color(0.7, 0.7, 0.7),
 	Color(1, 0.6, 0.75),
 	Color(1, 0.7, 0.65),
 	Color(1, 0.9, 0.7),
@@ -24,7 +24,7 @@ const COLORS: Array[Color] = [
 ]
 
 const HOVERED_COLORS: Array[Color] = [
-	Color(0.4, 0.4, 0.4),
+	Color(0.55, 0.55, 0.55),
 	Color(0.8, 0.48, 0.5),
 	Color(0.8, 0.56, 0.52),
 	Color(0.8, 0.72, 0.52),
@@ -37,8 +37,8 @@ const HOVERED_COLORS: Array[Color] = [
 	Color(0.8, 0.56, 0.72),
 ]
 
-const PRESSED_COLORS: Array[Color] = [
-	Color(0.2, 0.2, 0.2),
+const SELECTED_COLORS: Array[Color] = [
+	Color(0.4, 0.4, 0.4),
 	Color(0.64, 0.384, 0.4),
 	Color(0.64, 0.448, 0.416),
 	Color(0.64, 0.576, 0.416),
@@ -89,6 +89,8 @@ var zoom_factor: float = 1.0:
 
 var zoom_tween: Tween
 
+var hex_grid: HexGrid
+
 
 func _ready() -> void:
 	mouse_entered.connect(_mouse_entered)
@@ -120,14 +122,37 @@ func _draw() -> void:
 			draw_line(underline_start, underline_end, BLACK, 5)
 
 
+func _input(event: InputEvent) -> void:
+	if event is InputEventKey and is_selected():
+		if event.is_action_pressed("hex_1"):
+			number = 1
+		elif event.is_action_pressed("hex_2"):
+			number = 2
+		elif event.is_action_pressed("hex_3"):
+			number = 3
+		elif event.is_action_pressed("hex_4"):
+			number = 4
+		elif event.is_action_pressed("hex_5"):
+			number = 5
+		elif event.is_action_pressed("hex_6"):
+			number = 6
+		elif event.is_action_pressed("hex_7"):
+			number = 7
+		elif event.is_action_pressed("hex_8"):
+			number = 8
+		elif event.is_action_pressed("hex_9"):
+			number = 2
+		elif event.is_action_pressed("hex_10"):
+			number = 10
+		elif event.is_action_pressed("hex_clear"):
+			number = 0
+
+
 func _gui_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT:
 			if event.pressed and not given:
-				if number < len(COLORS) - 1:
-					number += 1
-				else:
-					number = 0
+				select_deselect()
 
 
 func _mouse_entered() -> void:
@@ -136,16 +161,11 @@ func _mouse_entered() -> void:
 	
 	if state == State.NORMAL:
 		state = State.HOVERED
-	elif state == State.PRESSED:
-		state = State.HOVERED_PRESSED
+	elif state == State.SELECTED:
+		state = State.HOVERED_SELECTED
 	
-	if zoom_tween:
-		zoom_tween.kill()
-	zoom_tween = create_tween()
-	
-	zoom_tween.tween_property(self, "color", get_state_color(state), 0.1)
-	zoom_tween.tween_property(self, "zoom_factor", 1.1, 0.15)
-	z_index = 5
+	if not is_selected():
+		tween_to_state()
 
 
 func _mouse_exited() -> void:
@@ -154,25 +174,47 @@ func _mouse_exited() -> void:
 	
 	if state == State.HOVERED:
 		state = State.NORMAL
-	elif state == State.HOVERED_PRESSED:
-		state = State.PRESSED
+	elif state == State.HOVERED_SELECTED:
+		state = State.SELECTED
 	
-	if zoom_tween:
-		zoom_tween.kill()
-	zoom_tween = create_tween()
-	
-	zoom_tween.tween_property(self, "zoom_factor", 1.0, 0.15)
-	zoom_tween.tween_property(self, "color", get_state_color(state), 0.1)
-	zoom_tween.tween_callback(reset_z)
-	z_index = 4
-
-
-func reset_z() -> void:
-	z_index = 0
+	if not is_selected():
+		tween_to_state()
 
 
 func _has_point(point: Vector2) -> bool:
 	return Geometry2D.is_point_in_polygon(point, get_hex())
+
+
+func select_deselect() -> void:
+	match state:
+		State.SELECTED:
+			state = State.NORMAL
+			
+			if hex_grid.selected_hex == self:
+				hex_grid.selected_hex = null
+		State.HOVERED_SELECTED:
+			state = State.HOVERED
+			
+			if hex_grid.selected_hex == self:
+				hex_grid.selected_hex = null
+		State.NORMAL:
+			state = State.SELECTED
+			
+			if hex_grid.selected_hex:
+				hex_grid.selected_hex.select_deselect()
+			hex_grid.selected_hex = self
+		State.HOVERED:
+			state = State.HOVERED_SELECTED
+			
+			if hex_grid.selected_hex:
+				hex_grid.selected_hex.select_deselect()
+			hex_grid.selected_hex = self
+	
+	tween_to_state()
+
+
+func reset_z() -> void:
+	z_index = 0
 
 
 func get_hex() -> PackedVector2Array:
@@ -202,17 +244,53 @@ func get_hex_zoomed() -> PackedVector2Array:
 	return zoomed
 
 
+func tween_to_state() -> void:
+	if zoom_tween:
+		zoom_tween.kill()
+	zoom_tween = create_tween().set_parallel()
+	
+	zoom_tween.tween_property(self, "color", get_state_color(state), 0.1)
+	zoom_tween.tween_property(self, "zoom_factor", get_state_zoom(state), 0.15)
+	z_index = get_state_z(state)
+
+
 func get_state_color(_state) -> Color:
 	match _state:
 		State.NORMAL:
 			return COLORS[number]
 		State.HOVERED:
 			return HOVERED_COLORS[number]
-		State.PRESSED, State.HOVERED_PRESSED:
-			return PRESSED_COLORS[number]
+		State.SELECTED, State.HOVERED_SELECTED:
+			return SELECTED_COLORS[number]
 	
 	return BLACK
 
 
+func get_state_zoom(_state) -> float:
+	match _state:
+		State.NORMAL:
+			return 1.0
+		State.SELECTED, State.HOVERED_SELECTED, State.HOVERED:
+			return 1.1
+	
+	return 1.0
+
+
+func get_state_z(_state) -> int:
+	match _state:
+		State.NORMAL:
+			return 1
+		State.HOVERED:
+			return 5
+		State.SELECTED, State.HOVERED_SELECTED:
+			return 10
+	
+	return 1
+
+
 func get_scale_factor() -> float:
 	return min(size.x / 2, size.y / sqrt(3))
+
+
+func is_selected() -> bool:
+	return state in [State.SELECTED, State.HOVERED_SELECTED]
