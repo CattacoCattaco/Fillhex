@@ -60,6 +60,9 @@ const BLACK = Color.BLACK
 		hex_grid.hex_data[pos].number = number
 		queue_redraw()
 		tween_to_state()
+		
+		if number != 0:
+			hex_grid.check_for_solution()
 
 @export var given: bool = true:
 	set(value):
@@ -130,6 +133,7 @@ func _input(event: InputEvent) -> void:
 	if event is InputEventKey and is_selected():
 		if event.is_action_pressed("hex_1"):
 			number = 1
+			
 		elif event.is_action_pressed("hex_2"):
 			number = 2
 		elif event.is_action_pressed("hex_3"):

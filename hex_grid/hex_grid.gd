@@ -2,6 +2,15 @@
 class_name HexGrid
 extends Control
 
+const ORTHOGONALS: Array[Vector2i] = [
+	Vector2i(-1, 1),
+	Vector2i(0, 1),
+	Vector2i(1, 0),
+	Vector2i(1, -1),
+	Vector2i(0, -1),
+	Vector2i(-1, 0),
+]
+
 @export var level: LevelData:
 	set(value):
 		level = value
@@ -95,3 +104,40 @@ func _gui_input(event: InputEvent) -> void:
 		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
 			if selected_hex:
 				selected_hex.select_deselect()
+
+
+func check_for_solution() -> void:
+	var unchecked_hexes: Array[Vector2i] = []
+	
+	for pos in grid_hexes:
+		if grid_hexes[pos].number == 0:
+			return
+		
+		unchecked_hexes.append(pos)
+	
+	while len(unchecked_hexes) > 0:
+		var hex: Hex = grid_hexes[unchecked_hexes[0]]
+		var group: Array[Vector2i] = get_group(unchecked_hexes[0])
+		
+		if len(group) != hex.number:
+			return
+		
+		for pos in group:
+			unchecked_hexes.erase(pos)
+	
+	print("You win!")
+
+
+func get_group(pos: Vector2i, found: Array[Vector2i] = []) -> Array[Vector2i]:
+	var group_number: int = grid_hexes[pos].number
+	found.append(pos)
+	
+	for direction in ORTHOGONALS:
+		if not grid_hexes.has(pos + direction):
+			continue
+		
+		var neighbor: Hex = grid_hexes[pos + direction]
+		if neighbor.number == group_number and neighbor.pos not in found:
+			get_group(neighbor.pos, found)
+	
+	return found
