@@ -12,5 +12,4 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_7uwje")
 level = ExtResource("2_mgi8c")
-hex_width = 150
 metadata/_custom_type_script = "uid://b4t7wf8xupe5d"
