@@ -1,0 +1,34 @@
+[gd_scene load_steps=4 format=3 uid="uid://bha4i8r1q2jc2"]
+
+[ext_resource type="Script" uid="uid://cyg8bdexkq5lp" path="res://addons/leveleditor/editor/level_editor.gd" id="1_b3d1x"]
+[ext_resource type="Script" uid="uid://b4t7wf8xupe5d" path="res://game/hex_grid/hex_grid.gd" id="1_ubnku"]
+[ext_resource type="Script" uid="uid://7rcthrh5jy66" path="res://game/hex_grid/level/manager/level_manager.gd" id="2_b3d1x"]
+
+[node name="LevelEditor" type="Control" node_paths=PackedStringArray("hex_grid", "level_manager")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("1_b3d1x")
+hex_grid = NodePath("HexGrid")
+level_manager = NodePath("LevelManager")
+
+[node name="HexGrid" type="Control" parent="." node_paths=PackedStringArray("level_manager")]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_ubnku")
+level_manager = NodePath("../LevelManager")
+is_tool = true
+metadata/_custom_type_script = "uid://b4t7wf8xupe5d"
+
+[node name="LevelManager" type="Node" parent="." node_paths=PackedStringArray("hex_grid")]
+script = ExtResource("2_b3d1x")
+hex_grid = NodePath("../HexGrid")

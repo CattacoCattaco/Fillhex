@@ -61,7 +61,7 @@ const BLACK = Color.BLACK
 		queue_redraw()
 		tween_to_state()
 		
-		if number != 0:
+		if number != 0 and not is_tool:
 			hex_grid.check_for_solution()
 
 @export var given: bool = true:
@@ -97,6 +97,7 @@ var zoom_tween: Tween
 
 var hex_grid: HexGrid
 var pos: Vector2i
+var is_tool: bool = false
 
 
 func _ready() -> void:
@@ -113,7 +114,7 @@ func _draw() -> void:
 	
 	draw_polyline(corners, BLACK, max(scale_factor * 0.1, 3))
 	
-	if number != 0:
+	if number > 0:
 		var font: Font = get_theme_default_font()
 		var font_size: int = floori(scale_factor * 0.7 * zoom_factor)
 		var text_width: int = floori(
@@ -133,7 +134,6 @@ func _input(event: InputEvent) -> void:
 	if event is InputEventKey and is_selected():
 		if event.is_action_pressed("hex_1"):
 			number = 1
-			
 		elif event.is_action_pressed("hex_2"):
 			number = 2
 		elif event.is_action_pressed("hex_3"):
@@ -153,6 +153,10 @@ func _input(event: InputEvent) -> void:
 		elif event.is_action_pressed("hex_10"):
 			number = 10
 		elif event.is_action_pressed("hex_clear"):
+			if number == 0 and is_tool:
+				number = -1
+				return
+			
 			number = 0
 		elif event.is_action_pressed("hex_deselect"):
 			select_deselect()
@@ -263,10 +267,25 @@ func tween_to_state() -> void:
 func get_state_color(_state) -> Color:
 	match _state:
 		State.NORMAL:
+			if number == -1:
+				var translucent_color: Color = COLORS[0]
+				translucent_color.a = 0.5
+				return translucent_color
+			
 			return COLORS[number]
 		State.HOVERED:
+			if number == -1:
+				var translucent_color: Color = HOVERED_COLORS[0]
+				translucent_color.a = 0.5
+				return translucent_color
+			
 			return HOVERED_COLORS[number]
 		State.SELECTED, State.HOVERED_SELECTED:
+			if number == -1:
+				var translucent_color: Color = SELECTED_COLORS[0]
+				translucent_color.a = 0.5
+				return translucent_color
+			
 			return SELECTED_COLORS[number]
 	
 	return BLACK
