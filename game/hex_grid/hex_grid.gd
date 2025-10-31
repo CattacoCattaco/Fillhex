@@ -18,22 +18,37 @@ const ORTHOGONALS: Array[Vector2i] = [
 @export var update: bool = false:
 	set(value):
 		update = false
-		queue_redraw()
+		display()
 
 var level: LevelData:
 	set(value):
 		level = value
-		hex_data = {}
-		queue_redraw()
+		if not just_saved:
+			in_setup = true
+			hex_data = {}
+		just_saved = false
+		display()
 
 var grid_hexes: Dictionary[Vector2i, Hex] = {}
 var hex_data: Dictionary[Vector2i, HexData] = {}
 
 var selected_hex: Hex
 var in_setup: bool = false
+var just_saved: bool = false
 
 
-func _draw() -> void:
+func _ready() -> void:
+	display()
+
+
+func _gui_input(event: InputEvent) -> void:
+	if event is InputEventMouseButton:
+		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+			if selected_hex:
+				selected_hex.select_deselect()
+
+
+func display() -> void:
 	if not level:
 		return
 	
@@ -55,8 +70,6 @@ func _draw() -> void:
 			
 			if distance_from_center > radius:
 				radius = distance_from_center
-		
-		print(radius)
 		
 		for pos in get_tiles_in_radius(radius):
 			if pos not in starting_hexes:
@@ -127,13 +140,6 @@ func _draw() -> void:
 		hex.position = center_hex_position + right_vector * pos.x + up_vector * pos.y
 	
 	in_setup = false
-
-
-func _gui_input(event: InputEvent) -> void:
-	if event is InputEventMouseButton:
-		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
-			if selected_hex:
-				selected_hex.select_deselect()
 
 
 func check_for_solution() -> void:
@@ -214,7 +220,22 @@ func get_triangle_of_hexes(from: Vector2i, direction_a: Vector2i, direction_b: V
 	var found: Array[Vector2i] = [from]
 	
 	for distance in range(1, max_distance + 1):
-		for i in range(distance):
+		for i in range(distance + 1):
 			found.append(from + direction_a * i + direction_b * (distance - i))
 	
 	return found
+
+
+func save_level() -> void:
+	var p_level: LevelData = load(level.resource_path)
+	
+	for pos in hex_data:
+		if hex_data[pos].number == -1:
+			p_level.hexes.erase(pos)
+		else:
+			p_level.hexes[pos] = hex_data[pos].number
+	
+	ResourceSaver.save(p_level)
+	
+	just_saved = true
+	level = p_level

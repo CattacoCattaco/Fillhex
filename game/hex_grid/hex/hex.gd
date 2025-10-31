@@ -63,6 +63,8 @@ const BLACK = Color.BLACK
 		
 		if number != 0 and not is_tool:
 			hex_grid.check_for_solution()
+		elif is_tool and not hex_grid.in_setup:
+			hex_grid.save_level()
 
 @export var given: bool = true:
 	set(value):
