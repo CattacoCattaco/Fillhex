@@ -54,8 +54,6 @@ func display() -> void:
 	
 	in_setup = true
 	
-	print("setup start")
-	
 	for pos in grid_hexes:
 		grid_hexes[pos].about_to_free = true
 		grid_hexes[pos].queue_free()
@@ -142,33 +140,40 @@ func display() -> void:
 		
 		hex.position = center_hex_position + right_vector * pos.x + up_vector * pos.y
 	
-	print("setup end")
 	in_setup = false
+	
+	if not is_tool:
+		check_for_solution()
 
 
 func check_for_solution() -> void:
 	if in_setup:
 		return
 	
+	var success: bool = true
+	
 	var unchecked_hexes: Array[Vector2i] = []
 	
 	for pos in grid_hexes:
 		if grid_hexes[pos].number == 0:
-			return
-		
-		unchecked_hexes.append(pos)
+			success = false
+		else:
+			unchecked_hexes.append(pos)
 	
 	while len(unchecked_hexes) > 0:
 		var hex: Hex = grid_hexes[unchecked_hexes[0]]
 		var group: Array[Vector2i] = get_group(unchecked_hexes[0])
 		
 		if len(group) != hex.number:
-			return
+			success = false
 		
 		for pos in group:
+			grid_hexes[pos].cluster_size = len(group)
 			unchecked_hexes.erase(pos)
 	
-	level_manager.next_level()
+	if success:
+		print("You win")
+		level_manager.next_level()
 
 
 func get_group(pos: Vector2i, found: Array[Vector2i] = []) -> Array[Vector2i]:

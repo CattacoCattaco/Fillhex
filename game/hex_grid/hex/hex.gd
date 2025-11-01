@@ -51,7 +51,9 @@ const SELECTED_COLORS: Array[Color] = [
 	Color(0.64, 0.448, 0.576),
 ]
 
-const BLACK = Color.BLACK
+const BLACK := Color.BLACK
+const GOOD_COLOR := Color(0.52, 1.0, 0.52, 1.0)
+const BAD_COLOR := Color(1.0, 0.3, 0.417, 1.0)
 
 
 @export var number: int = 1:
@@ -62,9 +64,9 @@ const BLACK = Color.BLACK
 		queue_redraw()
 		tween_to_state()
 		
-		if number != 0 and not is_tool:
+		if not is_tool:
 			hex_grid.check_for_solution()
-		elif is_tool and not hex_grid.in_setup:
+		elif not hex_grid.in_setup:
 			hex_grid.save_level()
 
 @export var given: bool = true:
@@ -94,6 +96,11 @@ var state: State = State.NORMAL:
 		state = value
 		hex_grid.hex_data[pos].state = state
 		
+		queue_redraw()
+
+var cluster_size: int = 0:
+	set(value):
+		cluster_size = value
 		queue_redraw()
 
 var zoom_factor: float = 1.0:
@@ -132,7 +139,19 @@ func _draw() -> void:
 		
 		var hex_center := Vector2(scale_factor, scale_factor * sqrt(3) / 2)
 		var text_pos := Vector2(hex_center.x - text_width / 2.0, hex_center.y + font_size / 2.0 - 4)
-		draw_string(font, text_pos, str(number), HORIZONTAL_ALIGNMENT_LEFT, -1, font_size, BLACK)
+		
+		var text_color: Color = BLACK
+		if cluster_size == number:
+			text_color = GOOD_COLOR
+		elif cluster_size > number:
+			text_color = BAD_COLOR
+		
+		draw_string(font, text_pos, str(number), HORIZONTAL_ALIGNMENT_LEFT, -1, font_size,
+				text_color)
+		
+		if text_color != BLACK:
+			draw_string_outline(font, text_pos, str(number), HORIZONTAL_ALIGNMENT_LEFT, -1,
+					font_size, 3, BLACK)
 		
 		if given:
 			var underline_start := text_pos + Vector2(0, 5)
