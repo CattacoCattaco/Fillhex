@@ -57,7 +57,8 @@ const BLACK = Color.BLACK
 @export var number: int = 1:
 	set(value):
 		number = value
-		hex_grid.hex_data[pos].number = number
+		if not hex_grid.in_setup:
+			hex_grid.hex_data[pos].number = number
 		queue_redraw()
 		tween_to_state()
 		
@@ -69,7 +70,8 @@ const BLACK = Color.BLACK
 @export var given: bool = true:
 	set(value):
 		given = value
-		hex_grid.hex_data[pos].given = given
+		if not hex_grid.in_setup:
+			hex_grid.hex_data[pos].given = given
 		queue_redraw()
 
 @export var update: bool = false:
@@ -86,8 +88,12 @@ const BLACK = Color.BLACK
 
 var state: State = State.NORMAL:
 	set(value):
+		if about_to_free:
+			return
+		
 		state = value
 		hex_grid.hex_data[pos].state = state
+		
 		queue_redraw()
 
 var zoom_factor: float = 1.0:
@@ -100,6 +106,8 @@ var zoom_tween: Tween
 var hex_grid: HexGrid
 var pos: Vector2i
 var is_tool: bool = false
+
+var about_to_free: bool = false
 
 
 func _ready() -> void:
@@ -151,7 +159,7 @@ func _input(event: InputEvent) -> void:
 		elif event.is_action_pressed("hex_8"):
 			number = 8
 		elif event.is_action_pressed("hex_9"):
-			number = 2
+			number = 9
 		elif event.is_action_pressed("hex_10"):
 			number = 10
 		elif event.is_action_pressed("hex_clear"):
@@ -167,10 +175,17 @@ func _input(event: InputEvent) -> void:
 func _gui_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
-			if not given:
+			if number == -1:
+				number = 0
+			elif not given:
 				select_deselect()
 			elif hex_grid.selected_hex:
 				hex_grid.selected_hex.select_deselect()
+		elif event.button_index == MOUSE_BUTTON_RIGHT and event.pressed:
+			if is_tool:
+				number = -1
+			else:
+				number = 0
 
 
 func _mouse_entered() -> void:

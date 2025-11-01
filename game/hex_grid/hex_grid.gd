@@ -54,7 +54,10 @@ func display() -> void:
 	
 	in_setup = true
 	
+	print("setup start")
+	
 	for pos in grid_hexes:
+		grid_hexes[pos].about_to_free = true
 		grid_hexes[pos].queue_free()
 	
 	grid_hexes = {}
@@ -139,6 +142,7 @@ func display() -> void:
 		
 		hex.position = center_hex_position + right_vector * pos.x + up_vector * pos.y
 	
+	print("setup end")
 	in_setup = false
 
 
