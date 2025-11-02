@@ -1,0 +1,17 @@
+[gd_scene load_steps=4 format=3 uid="uid://0ovie21sawiv"]
+
+[ext_resource type="Shader" uid="uid://bpogj4prwyeil" path="res://game/hex_grid/hex/end_shaders/green.gdshader" id="1_0npca"]
+[ext_resource type="Script" uid="uid://iyhu8lg46teu" path="res://game/hex_grid/hex/hex.gd" id="1_py0ip"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_r8hyr"]
+resource_local_to_scene = true
+shader = ExtResource("1_0npca")
+shader_parameter/time = 0.0
+
+[node name="EndShadersTest" type="Control"]
+material = SubResource("ShaderMaterial_r8hyr")
+custom_minimum_size = Vector2(100, 86.603)
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_py0ip")
+metadata/_custom_type_script = "uid://iyhu8lg46teu"

@@ -20,6 +20,8 @@ const ORTHOGONALS: Array[Vector2i] = [
 		update = false
 		display()
 
+@onready var coord_converter := Node2D.new()
+
 var level: LevelData:
 	set(value):
 		level = value
@@ -33,11 +35,13 @@ var grid_hexes: Dictionary[Vector2i, Hex] = {}
 var hex_data: Dictionary[Vector2i, HexData] = {}
 
 var selected_hex: Hex
+var in_end: bool = false
 var in_setup: bool = false
 var just_saved: bool = false
 
 
 func _ready() -> void:
+	add_child(coord_converter)
 	display()
 
 
@@ -45,7 +49,8 @@ func _gui_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
 			if selected_hex:
-				selected_hex.select_deselect()
+				if not in_end:
+					selected_hex.select_deselect()
 
 
 func _notification(what):
@@ -179,22 +184,115 @@ func check_for_solution() -> void:
 	
 	if success:
 		print("You win")
+		await do_end()
 		level_manager.next_level()
+
+
+func do_end() -> void:
+	var last_selected_hex = selected_hex
+	
+	in_end = true
+	
+	for pos in grid_hexes:
+		if grid_hexes[pos].state != Hex.State.NORMAL:
+			grid_hexes[pos].state = Hex.State.NORMAL
+	
+	var end_anim_index: int = randi_range(0, len(Hex.END_SHADERS) - 1)
+	var end_anim_shader: Shader = Hex.END_SHADERS[end_anim_index]
+	var untouched_hexes: Array[Vector2i] = []
+	
+	for pos in grid_hexes:
+		untouched_hexes.append(pos)
+	
+	var prev_gen: Array[Vector2i] = []
+	
+	while len(untouched_hexes) > 0:
+		var new_gen: Array[Vector2i] = []
+		
+		if prev_gen:
+			var random_pos: Vector2i = untouched_hexes.pick_random()
+			
+			new_gen.append(random_pos)
+			untouched_hexes.erase(random_pos)
+			
+			for pos in prev_gen:
+				for neighbor in get_neighbors(pos):
+					if neighbor in untouched_hexes:
+						untouched_hexes.erase(neighbor)
+						new_gen.append(neighbor)
+		else:
+			new_gen = [last_selected_hex.pos]
+			
+			untouched_hexes.erase(last_selected_hex.pos)
+		
+		var tween: Tween = get_tree().create_tween().set_parallel()
+		
+		for pos in new_gen:
+			var hex: Hex = grid_hexes[pos]
+			
+			var hex_material := ShaderMaterial.new()
+			hex_material.shader = end_anim_shader
+			
+			hex.material = hex_material
+			
+			tween.tween_method(hex.set_shader_time, 0.0, 1.0, 2)
+		
+		await get_tree().create_timer(1.25).timeout
+		
+		tween = get_tree().create_tween().set_parallel()
+		
+		for pos in new_gen:
+			var hex: Hex = grid_hexes[pos]
+			
+			hex.pivot_offset = hex.size / 2.0
+			
+			var top_left: Vector2 = coord_converter.to_local(Vector2(-150, -150))
+			var bottom_right: Vector2 = coord_converter.to_local(
+					get_viewport_rect().size + Vector2(150, 150))
+			
+			var end_side: int = randi_range(0, 3)
+			var end_position: Vector2
+			
+			match end_side:
+				0:
+					end_position = Vector2(top_left.x, randf_range(top_left.y, bottom_right.y))
+				1:
+					end_position = Vector2(randf_range(top_left.x, bottom_right.x), top_left.y)
+				2:
+					end_position = Vector2(bottom_right.x, randf_range(top_left.y, bottom_right.y))
+				3:
+					end_position = Vector2(randf_range(top_left.x, bottom_right.x), bottom_right.y)
+			
+			tween.tween_property(hex, "rotation", randf_range(-12 * PI, 12 * PI), 6)
+			tween.tween_property(hex, "position", end_position, 6)
+		
+		prev_gen = new_gen
+	
+	await get_tree().create_timer(6.25).timeout
+	
+	in_end = false
 
 
 func get_group(pos: Vector2i, found: Array[Vector2i] = []) -> Array[Vector2i]:
 	var group_number: int = grid_hexes[pos].number
 	found.append(pos)
 	
-	for direction in ORTHOGONALS:
-		if not grid_hexes.has(pos + direction):
-			continue
-		
-		var neighbor: Hex = grid_hexes[pos + direction]
+	for neighbor_pos in get_neighbors(pos):
+		var neighbor: Hex = grid_hexes[neighbor_pos]
 		if neighbor.number == group_number and neighbor.pos not in found:
-			get_group(neighbor.pos, found)
+			get_group(neighbor_pos, found)
 	
 	return found
+
+
+func get_neighbors(pos: Vector2i) -> Array[Vector2i]:
+	var neighbors: Array[Vector2i] = []
+	
+	for direction in ORTHOGONALS:
+		if grid_hexes.has(pos + direction):
+			neighbors.append(pos + direction)
+	
+	return neighbors
 
 
 func get_distance(start: Vector2i, end: Vector2i) -> int:

@@ -55,6 +55,10 @@ const BLACK := Color.BLACK
 const GOOD_COLOR := Color(0.52, 1.0, 0.52, 1.0)
 const BAD_COLOR := Color(1.0, 0.3, 0.417, 1.0)
 
+const END_SHADERS: Array[Shader] = [
+	preload("res://game/hex_grid/hex/end_shaders/green.gdshader"),
+]
+
 
 @export var number: int = 1:
 	set(value):
@@ -91,6 +95,14 @@ const BAD_COLOR := Color(1.0, 0.3, 0.417, 1.0)
 var state: State = State.NORMAL:
 	set(value):
 		if about_to_free:
+			return
+		
+		if hex_grid.in_end:
+			if state == State.NORMAL:
+				return
+			
+			state = State.NORMAL
+			queue_redraw()
 			return
 		
 		state = value
@@ -184,6 +196,7 @@ func _input(event: InputEvent) -> void:
 		elif event.is_action_pressed("hex_clear"):
 			if number == 0 and is_tool:
 				number = -1
+				select_deselect()
 				return
 			
 			number = 0
@@ -355,3 +368,8 @@ func get_scale_factor() -> float:
 
 func is_selected() -> bool:
 	return state in [State.SELECTED, State.HOVERED_SELECTED]
+
+
+func set_shader_time(time: float) -> void:
+	var shader_material: ShaderMaterial = material
+	shader_material.set_shader_parameter("time", time)
