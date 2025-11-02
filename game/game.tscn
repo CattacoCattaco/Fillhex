@@ -24,5 +24,4 @@ metadata/_custom_type_script = "uid://b4t7wf8xupe5d"
 
 [node name="LevelManager" type="Node" parent="." node_paths=PackedStringArray("hex_grid")]
 script = ExtResource("3_h7iqs")
-current_level = 2
 hex_grid = NodePath("../HexGrid")

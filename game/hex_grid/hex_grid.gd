@@ -48,6 +48,12 @@ func _gui_input(event: InputEvent) -> void:
 				selected_hex.select_deselect()
 
 
+func _notification(what):
+	match what:
+		NOTIFICATION_RESIZED:
+			display()
+
+
 func display() -> void:
 	if not level:
 		return
