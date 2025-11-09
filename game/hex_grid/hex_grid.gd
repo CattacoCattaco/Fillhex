@@ -39,6 +39,18 @@ var in_end: bool = false
 var in_setup: bool = false
 var just_saved: bool = false
 
+var zoom: float = 1.0:
+	set(value):
+		zoom = value
+		display()
+
+var zoom_factor_per_scroll: float = 1.1
+
+var offset := Vector2(0, 0):
+	set(value):
+		offset = value
+		display()
+
 
 func _ready() -> void:
 	add_child(coord_converter)
@@ -47,10 +59,25 @@ func _ready() -> void:
 
 func _gui_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton:
-		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
-			if selected_hex:
-				if not in_end:
-					selected_hex.select_deselect()
+		if event.pressed:
+			if event.button_index == MOUSE_BUTTON_LEFT:
+				if selected_hex:
+					if not in_end:
+						selected_hex.select_deselect()
+			elif event.button_index == MOUSE_BUTTON_WHEEL_UP:
+				offset *= zoom_factor_per_scroll
+				zoom *= zoom_factor_per_scroll
+			elif event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
+				if zoom / zoom_factor_per_scroll <= 1:
+					offset = offset / zoom
+					zoom = 1
+					return
+				
+				offset /= zoom_factor_per_scroll
+				zoom /= zoom_factor_per_scroll
+	elif event is InputEventMouseMotion:
+		if Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
+			offset += event.relative
 
 
 func _notification(what):
@@ -113,7 +140,7 @@ func display() -> void:
 			max(abs(top_left.y), bottom_right.y))
 	
 	var hex_width: int = floor(min(size.x * 0.8 / (2 * abs_max.x),
-			size.y * 0.8 / (abs_max.y * sqrt(3)), 150))
+			size.y * 0.8 / (abs_max.y * sqrt(3)), 150)) * zoom
 	
 	hex_size *= hex_width
 	hex_size = hex_size.ceil()
@@ -149,7 +176,9 @@ func display() -> void:
 		
 		hex.size = hex_size
 		
-		hex.position = center_hex_position + right_vector * pos.x + up_vector * pos.y
+		hex.position = center_hex_position + right_vector * pos.x + up_vector * pos.y + offset
+		
+		hex.display_state()
 	
 	in_setup = false
 	
@@ -267,7 +296,7 @@ func do_end() -> void:
 				3:
 					end_position = Vector2(randf_range(top_left.x, bottom_right.x), bottom_right.y)
 			
-			tween.tween_property(hex, "rotation", randf_range(-12 * PI, 12 * PI), 6)
+			tween.tween_property(hex, "rotation", randf_range(-30 * PI, 30 * PI), 6)
 			tween.tween_property(hex, "position", end_position, 6)
 		
 		prev_gen = new_gen

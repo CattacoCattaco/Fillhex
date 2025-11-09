@@ -141,7 +141,7 @@ func _draw() -> void:
 	
 	draw_colored_polygon(corners, color)
 	
-	draw_polyline(corners, BLACK, max(scale_factor * 0.1, 3))
+	#draw_polyline(corners, BLACK, max(scale_factor * 0.1, 3))
 	
 	if number > 0:
 		var font: Font = get_theme_default_font()
@@ -166,8 +166,8 @@ func _draw() -> void:
 					font_size, 3, BLACK)
 		
 		if given:
-			var underline_start := text_pos + Vector2(0, 5)
-			var underline_end := text_pos + Vector2(text_width, 5)
+			var underline_start := text_pos + Vector2(0, scale_factor * 0.08)
+			var underline_end := text_pos + Vector2(text_width, scale_factor * 0.08)
 			draw_line(underline_start, underline_end, BLACK, max(scale_factor * 0.06, 2))
 
 
@@ -245,7 +245,7 @@ func _mouse_exited() -> void:
 
 
 func _has_point(point: Vector2) -> bool:
-	return Geometry2D.is_point_in_polygon(point, get_hex())
+	return Geometry2D.is_point_in_polygon(point, get_hex_zoomed())
 
 
 func select_deselect() -> void:
@@ -313,6 +313,12 @@ func tween_to_state() -> void:
 	z_index = get_state_z(state)
 
 
+func display_state() -> void:
+	color = get_state_color(state)
+	zoom_factor = get_state_zoom(state)
+	z_index = get_state_z(state)
+
+
 func get_state_color(_state) -> Color:
 	match _state:
 		State.NORMAL:
@@ -343,11 +349,11 @@ func get_state_color(_state) -> Color:
 func get_state_zoom(_state) -> float:
 	match _state:
 		State.NORMAL:
-			return 1.0
+			return 0.9
 		State.SELECTED, State.HOVERED_SELECTED, State.HOVERED:
-			return 1.05
+			return 0.925
 	
-	return 1.0
+	return 0.9
 
 
 func get_state_z(_state) -> int:
