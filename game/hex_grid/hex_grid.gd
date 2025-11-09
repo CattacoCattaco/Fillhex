@@ -233,6 +233,8 @@ func do_end() -> void:
 			var hex_material := ShaderMaterial.new()
 			hex_material.shader = end_anim_shader
 			
+			hex.z_index = 6
+			
 			hex.material = hex_material
 			
 			tween.tween_method(hex.set_shader_time, 0.0, 1.0, 2)
@@ -244,11 +246,13 @@ func do_end() -> void:
 		for pos in new_gen:
 			var hex: Hex = grid_hexes[pos]
 			
+			hex.z_index = 10
+			
 			hex.pivot_offset = hex.size / 2.0
 			
-			var top_left: Vector2 = coord_converter.to_local(Vector2(-150, -150))
+			var top_left: Vector2 = coord_converter.to_local(Vector2(-250, -250))
 			var bottom_right: Vector2 = coord_converter.to_local(
-					get_viewport_rect().size + Vector2(150, 150))
+					get_viewport_rect().size + Vector2(250, 250))
 			
 			var end_side: int = randi_range(0, 3)
 			var end_position: Vector2

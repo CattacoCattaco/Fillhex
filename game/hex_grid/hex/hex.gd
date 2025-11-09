@@ -216,7 +216,7 @@ func _gui_input(event: InputEvent) -> void:
 		elif event.button_index == MOUSE_BUTTON_RIGHT and event.pressed:
 			if is_tool:
 				number = -1
-			else:
+			elif not given:
 				number = 0
 
 
