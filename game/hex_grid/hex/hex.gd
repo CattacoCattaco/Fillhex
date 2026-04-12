@@ -9,6 +9,11 @@ enum State {
 	HOVERED_SELECTED,
 }
 
+enum EndShader {
+	GREEN,
+	DISSOLVE,
+}
+
 const COLORS: Array[Color] = [
 	Color(0.7, 0.7, 0.7),
 	Color(1, 0.6, 0.75),
@@ -57,6 +62,7 @@ const BAD_COLOR := Color(1.0, 0.3, 0.417, 1.0)
 
 const END_SHADERS: Array[Shader] = [
 	preload("res://game/hex_grid/hex/end_shaders/green.gdshader"),
+	preload("res://game/hex_grid/hex/end_shaders/dissolve.gdshader"),
 ]
 
 
@@ -138,8 +144,9 @@ func _draw() -> void:
 	var scale_factor: float = get_scale_factor()
 	
 	var corners: PackedVector2Array = get_hex_zoomed()
+	var uvs: PackedVector2Array = get_uvs()
 	
-	draw_colored_polygon(corners, color)
+	draw_colored_polygon(corners, color, uvs)
 	
 	#draw_polyline(corners, BLACK, max(scale_factor * 0.1, 3))
 	
@@ -218,6 +225,9 @@ func _gui_input(event: InputEvent) -> void:
 				number = -1
 			elif not given:
 				number = 0
+	elif event is InputEventMouseMotion:
+		if Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
+			hex_grid.offset += event.relative
 
 
 func _mouse_entered() -> void:
@@ -287,6 +297,18 @@ func get_hex() -> PackedVector2Array:
 		Vector2(scale_factor / 2, scale_factor * sqrt(3)),
 		Vector2(0, scale_factor * sqrt(3) / 2),
 		Vector2(scale_factor / 2, 0),
+	])
+
+
+func get_uvs() -> PackedVector2Array:
+	return PackedVector2Array([
+		Vector2(1 / 4.0, 0),
+		Vector2(3 / 4.0, 0),
+		Vector2(1, 1 / 2.0),
+		Vector2(3 / 4.0, 1),
+		Vector2(1 / 4.0, 1),
+		Vector2(0, 1 / 2.0),
+		Vector2(1 / 4.0, 0),
 	])
 
 

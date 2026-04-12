@@ -1,9 +1,9 @@
-[gd_scene load_steps=3 format=3 uid="uid://pnpi2ioaqmvi"]
+[gd_scene format=3 uid="uid://pnpi2ioaqmvi"]
 
 [ext_resource type="Script" uid="uid://b4t7wf8xupe5d" path="res://game/hex_grid/hex_grid.gd" id="1_vasa2"]
 [ext_resource type="Script" uid="uid://7rcthrh5jy66" path="res://game/hex_grid/level/manager/level_manager.gd" id="3_h7iqs"]
 
-[node name="Game" type="Control"]
+[node name="Game" type="Control" unique_id=921569018]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -11,7 +11,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="HexGrid" type="Control" parent="." node_paths=PackedStringArray("level_manager")]
+[node name="HexGrid" type="Control" parent="." unique_id=5772488 node_paths=PackedStringArray("level_manager")]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -20,11 +20,11 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+mouse_force_pass_scroll_events = false
 script = ExtResource("1_vasa2")
 level_manager = NodePath("../LevelManager")
 metadata/_custom_type_script = "uid://b4t7wf8xupe5d"
 
-[node name="LevelManager" type="Node" parent="." node_paths=PackedStringArray("hex_grid")]
+[node name="LevelManager" type="Node" parent="." unique_id=637236259 node_paths=PackedStringArray("hex_grid")]
 script = ExtResource("3_h7iqs")
-current_level = 9
 hex_grid = NodePath("../HexGrid")

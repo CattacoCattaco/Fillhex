@@ -218,7 +218,7 @@ func check_for_solution() -> void:
 
 
 func do_end() -> void:
-	var last_selected_hex = selected_hex
+	var last_selected_hex: Hex = selected_hex
 	
 	in_end = true
 	
@@ -227,7 +227,18 @@ func do_end() -> void:
 			grid_hexes[pos].state = Hex.State.NORMAL
 	
 	var end_anim_index: int = randi_range(0, len(Hex.END_SHADERS) - 1)
-	var end_anim_shader: Shader = Hex.END_SHADERS[end_anim_index]
+	
+	match end_anim_index:
+		Hex.EndShader.GREEN:
+			await do_green_end(last_selected_hex)
+		Hex.EndShader.DISSOLVE:
+			await do_dissolve_end(last_selected_hex)
+	
+	in_end = false
+
+
+func do_green_end(last_selected_hex: Hex) -> void:
+	var end_anim_shader: Shader = Hex.END_SHADERS[Hex.EndShader.GREEN]
 	var untouched_hexes: Array[Vector2i] = []
 	
 	for pos in grid_hexes:
@@ -302,8 +313,61 @@ func do_end() -> void:
 		prev_gen = new_gen
 	
 	await get_tree().create_timer(6.25).timeout
+
+
+func do_dissolve_end(last_selected_hex: Hex) -> void:
+	var end_anim_shader: Shader = Hex.END_SHADERS[Hex.EndShader.DISSOLVE]
+	var untouched_hexes: Array[Vector2i] = []
 	
-	in_end = false
+	for pos in grid_hexes:
+		untouched_hexes.append(pos)
+		
+		var hex: Hex = grid_hexes[pos]
+		
+		var hex_material := ShaderMaterial.new()
+		hex_material.shader = end_anim_shader
+		var noise_texture := NoiseTexture2D.new()
+		var noise := FastNoiseLite.new()
+		noise.frequency = 0.01
+		noise_texture.noise = noise
+		await noise_texture.changed
+		hex_material.set_shader_parameter("noise", noise_texture)
+		
+		hex.material = hex_material
+	
+	var prev_gen: Array[Vector2i] = []
+	
+	while len(untouched_hexes) > 0:
+		var new_gen: Array[Vector2i] = []
+		
+		if prev_gen:
+			var random_pos: Vector2i = untouched_hexes.pick_random()
+			
+			new_gen.append(random_pos)
+			untouched_hexes.erase(random_pos)
+			
+			for pos in prev_gen:
+				for neighbor in get_neighbors(pos):
+					if neighbor in untouched_hexes:
+						untouched_hexes.erase(neighbor)
+						new_gen.append(neighbor)
+		else:
+			new_gen = [last_selected_hex.pos]
+			
+			untouched_hexes.erase(last_selected_hex.pos)
+		
+		var tween: Tween = get_tree().create_tween().set_parallel()
+		
+		for pos in new_gen:
+			var hex: Hex = grid_hexes[pos]
+			
+			hex.z_index = 6
+			
+			tween.tween_method(hex.set_shader_time, 0.0, 1.0, 2.5)
+		
+		await get_tree().create_timer(2).timeout
+		
+		prev_gen = new_gen
 
 
 func get_group(pos: Vector2i, found: Array[Vector2i] = []) -> Array[Vector2i]:
