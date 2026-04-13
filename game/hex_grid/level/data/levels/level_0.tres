@@ -11,7 +11,6 @@ given = true
 [sub_resource type="Resource" id="Resource_5uwsm"]
 script = ExtResource("1_wvuut")
 number = 4
-state = 3
 given = true
 
 [sub_resource type="Resource" id="Resource_4cw2y"]
@@ -27,6 +26,7 @@ script = ExtResource("1_wvuut")
 
 [sub_resource type="Resource" id="Resource_852fs"]
 script = ExtResource("1_wvuut")
+state = 2
 
 [sub_resource type="Resource" id="Resource_vlahx"]
 script = ExtResource("1_wvuut")

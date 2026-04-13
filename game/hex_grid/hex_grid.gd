@@ -161,8 +161,9 @@ func display() -> void:
 		hex.is_tool = is_tool
 		
 		hex.number = hex_data[pos].number
-		hex.state = hex_data[pos].state
+		hex.state = Hex.State.NORMAL
 		hex.given = hex_data[pos].given
+		hex.clue_type = hex_data[pos].clue_type
 		
 		if hex.is_selected():
 			selected_hex = hex
@@ -197,15 +198,42 @@ func check_for_solution() -> void:
 			unchecked_hexes.append(pos)
 	
 	while len(unchecked_hexes) > 0:
-		var hex: Hex = grid_hexes[unchecked_hexes[0]]
-		var group: Array[Vector2i] = get_group(unchecked_hexes[0])
+		var hex: Hex = grid_hexes[unchecked_hexes[-1]]
 		
-		if len(group) != hex.number:
-			success = false
-		
-		for pos in group:
-			grid_hexes[pos].cluster_size = len(group)
-			unchecked_hexes.erase(pos)
+		match hex.clue_type:
+			HexData.ClueType.DEFAULT:
+				var group: Array[Vector2i] = get_group(unchecked_hexes[-1])
+				
+				var fulfillment: Hex.Fulfillment
+				if len(group) < hex.number:
+					fulfillment = Hex.Fulfillment.UNFULFILLED
+				elif len(group) == hex.number:
+					fulfillment = Hex.Fulfillment.FULFILLED
+				else:
+					fulfillment = Hex.Fulfillment.OVERDONE
+				
+				if fulfillment != Hex.Fulfillment.FULFILLED:
+					success = false
+				
+				for pos in group:
+					grid_hexes[pos].fulfillment = fulfillment
+					unchecked_hexes.erase(pos)
+			HexData.ClueType.CIRCLE:
+				hex.fulfillment = Hex.Fulfillment.UNFULFILLED
+				
+				for neighbor_pos: Vector2i in get_neighbors(hex.pos):
+					var neighbor: Hex = grid_hexes[neighbor_pos]
+					
+					if neighbor.clue_type != HexData.ClueType.DEFAULT:
+						continue
+					
+					if neighbor.number == hex.number:
+						hex.fulfillment = Hex.Fulfillment.FULFILLED
+				
+				if hex.fulfillment != Hex.Fulfillment.FULFILLED:
+					success = false
+				
+				unchecked_hexes.pop_back()
 	
 	if success:
 		print("You win")
@@ -378,7 +406,8 @@ func get_group(pos: Vector2i, found: Array[Vector2i] = []) -> Array[Vector2i]:
 	
 	for neighbor_pos in get_neighbors(pos):
 		var neighbor: Hex = grid_hexes[neighbor_pos]
-		if neighbor.number == group_number and neighbor.pos not in found:
+		if (neighbor.number == group_number and neighbor.clue_type == HexData.ClueType.DEFAULT
+				and neighbor.pos not in found):
 			get_group(neighbor_pos, found)
 	
 	return found
@@ -447,6 +476,8 @@ func save_level() -> void:
 		else:
 			p_level.hexes[pos] = hex_data[pos]
 			p_level.hexes[pos].given = hex_data[pos].number != 0
+			if hex_data[pos].number == 0:
+				p_level.hexes[pos].clue_type = HexData.ClueType.DEFAULT
 	
 	ResourceSaver.save(p_level)
 	

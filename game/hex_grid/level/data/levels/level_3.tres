@@ -10,11 +10,9 @@ given = true
 
 [sub_resource type="Resource" id="Resource_4ydkw"]
 script = ExtResource("1_kpna5")
-given = true
 
 [sub_resource type="Resource" id="Resource_4aod0"]
 script = ExtResource("1_kpna5")
-given = true
 
 [sub_resource type="Resource" id="Resource_lujd4"]
 script = ExtResource("1_kpna5")
@@ -23,19 +21,20 @@ given = true
 
 [sub_resource type="Resource" id="Resource_ltkbr"]
 script = ExtResource("1_kpna5")
-given = true
 
 [sub_resource type="Resource" id="Resource_fba2j"]
 script = ExtResource("1_kpna5")
-given = true
 
 [sub_resource type="Resource" id="Resource_w34b7"]
 script = ExtResource("1_kpna5")
-given = true
 
 [sub_resource type="Resource" id="Resource_mq1qq"]
 script = ExtResource("1_kpna5")
-given = true
+state = 1
+
+[sub_resource type="Resource" id="Resource_kpna5"]
+script = ExtResource("1_kpna5")
+state = 2
 
 [resource]
 script = ExtResource("1_2vs3q")
@@ -47,16 +46,7 @@ Vector2i(0, 0): SubResource("Resource_lujd4"),
 Vector2i(0, 1): SubResource("Resource_ltkbr"),
 Vector2i(1, -1): SubResource("Resource_fba2j"),
 Vector2i(1, 0): SubResource("Resource_w34b7"),
-Vector2i(2, 0): SubResource("Resource_mq1qq")
-})
-new_hexes = Dictionary[Vector2i, ExtResource("1_kpna5")]({
-Vector2i(-1, 0): SubResource("Resource_7rv58"),
-Vector2i(-1, 1): SubResource("Resource_4ydkw"),
-Vector2i(0, -1): SubResource("Resource_4aod0"),
-Vector2i(0, 0): SubResource("Resource_lujd4"),
-Vector2i(0, 1): SubResource("Resource_ltkbr"),
-Vector2i(1, -1): SubResource("Resource_fba2j"),
-Vector2i(1, 0): SubResource("Resource_w34b7"),
+Vector2i(1, 1): SubResource("Resource_kpna5"),
 Vector2i(2, 0): SubResource("Resource_mq1qq")
 })
 metadata/_custom_type_script = "uid://hu5ar83kekht"

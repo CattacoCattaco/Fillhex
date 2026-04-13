@@ -5,31 +5,24 @@
 
 [sub_resource type="Resource" id="Resource_nfplo"]
 script = ExtResource("1_yyfrt")
-given = true
 
 [sub_resource type="Resource" id="Resource_ewplb"]
 script = ExtResource("1_yyfrt")
-given = true
 
 [sub_resource type="Resource" id="Resource_i1ro6"]
 script = ExtResource("1_yyfrt")
-given = true
 
 [sub_resource type="Resource" id="Resource_hskiq"]
 script = ExtResource("1_yyfrt")
-given = true
 
 [sub_resource type="Resource" id="Resource_iku4p"]
 script = ExtResource("1_yyfrt")
-given = true
 
 [sub_resource type="Resource" id="Resource_64j8k"]
 script = ExtResource("1_yyfrt")
-given = true
 
 [sub_resource type="Resource" id="Resource_k5sdp"]
 script = ExtResource("1_yyfrt")
-given = true
 
 [sub_resource type="Resource" id="Resource_fa8wc"]
 script = ExtResource("1_yyfrt")
@@ -38,11 +31,9 @@ given = true
 
 [sub_resource type="Resource" id="Resource_8emk4"]
 script = ExtResource("1_yyfrt")
-given = true
 
 [sub_resource type="Resource" id="Resource_7848b"]
 script = ExtResource("1_yyfrt")
-given = true
 
 [sub_resource type="Resource" id="Resource_ogwyj"]
 script = ExtResource("1_yyfrt")
@@ -61,7 +52,6 @@ given = true
 
 [sub_resource type="Resource" id="Resource_4yhhq"]
 script = ExtResource("1_yyfrt")
-given = true
 
 [sub_resource type="Resource" id="Resource_oooe4"]
 script = ExtResource("1_yyfrt")
@@ -75,7 +65,6 @@ given = true
 
 [sub_resource type="Resource" id="Resource_tshxi"]
 script = ExtResource("1_yyfrt")
-given = true
 
 [sub_resource type="Resource" id="Resource_eypk2"]
 script = ExtResource("1_yyfrt")
@@ -84,19 +73,15 @@ given = true
 
 [sub_resource type="Resource" id="Resource_gaiic"]
 script = ExtResource("1_yyfrt")
-given = true
 
 [sub_resource type="Resource" id="Resource_trqu8"]
 script = ExtResource("1_yyfrt")
-given = true
 
 [sub_resource type="Resource" id="Resource_ipl8i"]
 script = ExtResource("1_yyfrt")
-given = true
 
 [sub_resource type="Resource" id="Resource_q10cb"]
 script = ExtResource("1_yyfrt")
-given = true
 
 [sub_resource type="Resource" id="Resource_aaiwa"]
 script = ExtResource("1_yyfrt")
@@ -105,11 +90,9 @@ given = true
 
 [sub_resource type="Resource" id="Resource_bqwrg"]
 script = ExtResource("1_yyfrt")
-given = true
 
 [sub_resource type="Resource" id="Resource_hrskm"]
 script = ExtResource("1_yyfrt")
-given = true
 
 [sub_resource type="Resource" id="Resource_8piuj"]
 script = ExtResource("1_yyfrt")
@@ -118,15 +101,9 @@ given = true
 
 [sub_resource type="Resource" id="Resource_oq5id"]
 script = ExtResource("1_yyfrt")
-given = true
-
-[sub_resource type="Resource" id="Resource_saqqq"]
-script = ExtResource("1_yyfrt")
-given = true
 
 [sub_resource type="Resource" id="Resource_d8vev"]
 script = ExtResource("1_yyfrt")
-given = true
 
 [sub_resource type="Resource" id="Resource_oyh83"]
 script = ExtResource("1_yyfrt")
@@ -135,15 +112,12 @@ given = true
 
 [sub_resource type="Resource" id="Resource_v3ngx"]
 script = ExtResource("1_yyfrt")
-given = true
 
 [sub_resource type="Resource" id="Resource_lad0v"]
 script = ExtResource("1_yyfrt")
-given = true
 
 [sub_resource type="Resource" id="Resource_no7w7"]
 script = ExtResource("1_yyfrt")
-given = true
 
 [sub_resource type="Resource" id="Resource_yvkaq"]
 script = ExtResource("1_yyfrt")
@@ -152,11 +126,9 @@ given = true
 
 [sub_resource type="Resource" id="Resource_nnvgl"]
 script = ExtResource("1_yyfrt")
-given = true
 
 [sub_resource type="Resource" id="Resource_jl7ef"]
 script = ExtResource("1_yyfrt")
-given = true
 
 [sub_resource type="Resource" id="Resource_ptcwp"]
 script = ExtResource("1_yyfrt")
@@ -165,7 +137,6 @@ given = true
 
 [sub_resource type="Resource" id="Resource_us4re"]
 script = ExtResource("1_yyfrt")
-given = true
 
 [sub_resource type="Resource" id="Resource_we634"]
 script = ExtResource("1_yyfrt")
@@ -174,43 +145,33 @@ given = true
 
 [sub_resource type="Resource" id="Resource_xoh1y"]
 script = ExtResource("1_yyfrt")
-given = true
 
 [sub_resource type="Resource" id="Resource_2aa5r"]
 script = ExtResource("1_yyfrt")
-given = true
 
 [sub_resource type="Resource" id="Resource_dqact"]
 script = ExtResource("1_yyfrt")
-given = true
 
 [sub_resource type="Resource" id="Resource_xvmw8"]
 script = ExtResource("1_yyfrt")
-given = true
 
 [sub_resource type="Resource" id="Resource_6xtul"]
 script = ExtResource("1_yyfrt")
-given = true
 
 [sub_resource type="Resource" id="Resource_l7jqo"]
 script = ExtResource("1_yyfrt")
-given = true
 
 [sub_resource type="Resource" id="Resource_n4c6s"]
 script = ExtResource("1_yyfrt")
-given = true
 
 [sub_resource type="Resource" id="Resource_xidl7"]
 script = ExtResource("1_yyfrt")
-given = true
 
 [sub_resource type="Resource" id="Resource_lnydg"]
 script = ExtResource("1_yyfrt")
-given = true
 
 [sub_resource type="Resource" id="Resource_p38t1"]
 script = ExtResource("1_yyfrt")
-given = true
 
 [sub_resource type="Resource" id="Resource_32yeo"]
 script = ExtResource("1_yyfrt")
@@ -219,15 +180,12 @@ given = true
 
 [sub_resource type="Resource" id="Resource_f7ubh"]
 script = ExtResource("1_yyfrt")
-given = true
 
 [sub_resource type="Resource" id="Resource_rqnki"]
 script = ExtResource("1_yyfrt")
-given = true
 
 [sub_resource type="Resource" id="Resource_60prj"]
 script = ExtResource("1_yyfrt")
-given = true
 
 [sub_resource type="Resource" id="Resource_11cbs"]
 script = ExtResource("1_yyfrt")
@@ -236,68 +194,14 @@ given = true
 
 [sub_resource type="Resource" id="Resource_et0y0"]
 script = ExtResource("1_yyfrt")
-given = true
+
+[sub_resource type="Resource" id="Resource_saqqq"]
+script = ExtResource("1_yyfrt")
+state = 3
 
 [resource]
 script = ExtResource("1_rp3ge")
 hexes = Dictionary[Vector2i, ExtResource("1_yyfrt")]({
-Vector2i(-4, 0): SubResource("Resource_nfplo"),
-Vector2i(-4, 1): SubResource("Resource_ewplb"),
-Vector2i(-4, 2): SubResource("Resource_i1ro6"),
-Vector2i(-4, 3): SubResource("Resource_hskiq"),
-Vector2i(-4, 4): SubResource("Resource_iku4p"),
-Vector2i(-3, -1): SubResource("Resource_64j8k"),
-Vector2i(-3, 0): SubResource("Resource_k5sdp"),
-Vector2i(-3, 1): SubResource("Resource_fa8wc"),
-Vector2i(-3, 2): SubResource("Resource_8emk4"),
-Vector2i(-3, 3): SubResource("Resource_7848b"),
-Vector2i(-3, 4): SubResource("Resource_ogwyj"),
-Vector2i(-2, -2): SubResource("Resource_4g3dw"),
-Vector2i(-2, 0): SubResource("Resource_mfp5p"),
-Vector2i(-2, 1): SubResource("Resource_4yhhq"),
-Vector2i(-2, 3): SubResource("Resource_oooe4"),
-Vector2i(-2, 4): SubResource("Resource_julri"),
-Vector2i(-1, -3): SubResource("Resource_tshxi"),
-Vector2i(-1, -1): SubResource("Resource_eypk2"),
-Vector2i(-1, 0): SubResource("Resource_gaiic"),
-Vector2i(-1, 1): SubResource("Resource_trqu8"),
-Vector2i(-1, 2): SubResource("Resource_ipl8i"),
-Vector2i(-1, 3): SubResource("Resource_q10cb"),
-Vector2i(-1, 4): SubResource("Resource_aaiwa"),
-Vector2i(0, -4): SubResource("Resource_bqwrg"),
-Vector2i(0, -3): SubResource("Resource_hrskm"),
-Vector2i(0, -2): SubResource("Resource_8piuj"),
-Vector2i(0, -1): SubResource("Resource_oq5id"),
-Vector2i(0, 0): SubResource("Resource_saqqq"),
-Vector2i(0, 1): SubResource("Resource_d8vev"),
-Vector2i(0, 2): SubResource("Resource_oyh83"),
-Vector2i(0, 3): SubResource("Resource_v3ngx"),
-Vector2i(0, 4): SubResource("Resource_lad0v"),
-Vector2i(1, -4): SubResource("Resource_no7w7"),
-Vector2i(1, -2): SubResource("Resource_yvkaq"),
-Vector2i(1, -1): SubResource("Resource_nnvgl"),
-Vector2i(1, 0): SubResource("Resource_jl7ef"),
-Vector2i(1, 1): SubResource("Resource_ptcwp"),
-Vector2i(1, 2): SubResource("Resource_us4re"),
-Vector2i(1, 3): SubResource("Resource_we634"),
-Vector2i(2, -4): SubResource("Resource_xoh1y"),
-Vector2i(2, -2): SubResource("Resource_2aa5r"),
-Vector2i(2, -1): SubResource("Resource_dqact"),
-Vector2i(2, 1): SubResource("Resource_xvmw8"),
-Vector2i(2, 2): SubResource("Resource_6xtul"),
-Vector2i(3, -4): SubResource("Resource_l7jqo"),
-Vector2i(3, -3): SubResource("Resource_n4c6s"),
-Vector2i(3, -2): SubResource("Resource_xidl7"),
-Vector2i(3, -1): SubResource("Resource_lnydg"),
-Vector2i(3, 0): SubResource("Resource_p38t1"),
-Vector2i(3, 1): SubResource("Resource_32yeo"),
-Vector2i(4, -4): SubResource("Resource_f7ubh"),
-Vector2i(4, -3): SubResource("Resource_rqnki"),
-Vector2i(4, -2): SubResource("Resource_60prj"),
-Vector2i(4, -1): SubResource("Resource_11cbs"),
-Vector2i(4, 0): SubResource("Resource_et0y0")
-})
-new_hexes = Dictionary[Vector2i, ExtResource("1_yyfrt")]({
 Vector2i(-4, 0): SubResource("Resource_nfplo"),
 Vector2i(-4, 1): SubResource("Resource_ewplb"),
 Vector2i(-4, 2): SubResource("Resource_i1ro6"),

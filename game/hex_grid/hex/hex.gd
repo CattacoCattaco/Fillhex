@@ -9,6 +9,12 @@ enum State {
 	HOVERED_SELECTED,
 }
 
+enum Fulfillment {
+	UNFULFILLED, # Not fulfilled but still room for fulfillment
+	FULFILLED, # Fulfilled
+	OVERDONE, # Too many of something
+}
+
 enum EndShader {
 	GREEN,
 	DISSOLVE,
@@ -26,6 +32,7 @@ const COLORS: Array[Color] = [
 	Color(0.7, 0.7, 1),
 	Color(0.85, 0.65, 1),
 	Color(1, 0.7, 0.9),
+	Color(1.0, 0.5, 0.85),
 ]
 
 const HOVERED_COLORS: Array[Color] = [
@@ -40,6 +47,7 @@ const HOVERED_COLORS: Array[Color] = [
 	Color(0.56, 0.56, 0.8),
 	Color(0.68, 0.52, 0.8),
 	Color(0.8, 0.56, 0.72),
+	Color(0.8, 0.4, 0.68),
 ]
 
 const SELECTED_COLORS: Array[Color] = [
@@ -54,6 +62,7 @@ const SELECTED_COLORS: Array[Color] = [
 	Color(0.448, 0.448, 0.64),
 	Color(0.544, 0.416, 0.64),
 	Color(0.64, 0.448, 0.576),
+	Color(0.64, 0.32, 0.544),
 ]
 
 const BLACK := Color.BLACK
@@ -86,6 +95,14 @@ const END_SHADERS: Array[Shader] = [
 			hex_grid.hex_data[pos].given = given
 		queue_redraw()
 
+@export var clue_type: HexData.ClueType = HexData.ClueType.DEFAULT:
+	set(value):
+		clue_type = value
+		if not hex_grid.in_setup:
+			hex_grid.hex_data[pos].clue_type = clue_type
+		queue_redraw()
+		tween_to_state()
+
 @export var update: bool = false:
 	set(value):
 		update = false
@@ -116,9 +133,9 @@ var state: State = State.NORMAL:
 		
 		queue_redraw()
 
-var cluster_size: int = 0:
+var fulfillment: Fulfillment = Fulfillment.UNFULFILLED:
 	set(value):
-		cluster_size = value
+		fulfillment = value
 		queue_redraw()
 
 var zoom_factor: float = 1.0:
@@ -160,9 +177,9 @@ func _draw() -> void:
 		var text_pos := Vector2(hex_center.x - text_width / 2.0, hex_center.y + font_size / 2.0 - 4)
 		
 		var text_color: Color = BLACK
-		if cluster_size == number:
+		if fulfillment == Fulfillment.FULFILLED:
 			text_color = GOOD_COLOR
-		elif cluster_size > number:
+		elif fulfillment == Fulfillment.OVERDONE:
 			text_color = BAD_COLOR
 		
 		draw_string(font, text_pos, str(number), HORIZONTAL_ALIGNMENT_LEFT, -1, font_size,
@@ -172,10 +189,15 @@ func _draw() -> void:
 			draw_string_outline(font, text_pos, str(number), HORIZONTAL_ALIGNMENT_LEFT, -1,
 					font_size, 3, BLACK)
 		
+		var line_thickness: float = max(scale_factor * 0.06, 2)
 		if given:
 			var underline_start := text_pos + Vector2(0, scale_factor * 0.08)
 			var underline_end := text_pos + Vector2(text_width, scale_factor * 0.08)
-			draw_line(underline_start, underline_end, BLACK, max(scale_factor * 0.06, 2))
+			draw_line(underline_start, underline_end, BLACK, line_thickness)
+		
+		match clue_type:
+			HexData.ClueType.CIRCLE:
+				draw_circle(hex_center, text_width * 1.25, Color.BLACK, false, line_thickness)
 
 
 func _input(event: InputEvent) -> void:
@@ -209,7 +231,12 @@ func _input(event: InputEvent) -> void:
 			number = 0
 		elif event.is_action_pressed("hex_deselect"):
 			select_deselect()
-
+		elif event.is_action_pressed("hex_circle"):
+			if is_tool:
+				if clue_type != HexData.ClueType.CIRCLE:
+					clue_type = HexData.ClueType.CIRCLE
+				else:
+					clue_type = HexData.ClueType.DEFAULT
 
 func _gui_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton:
@@ -267,13 +294,14 @@ func select_deselect() -> void:
 		State.NORMAL:
 			state = State.SELECTED
 			
-			if hex_grid.selected_hex:
+			if hex_grid.selected_hex and hex_grid.selected_hex != self:
 				hex_grid.selected_hex.select_deselect()
+			
 			hex_grid.selected_hex = self
 		State.HOVERED:
 			state = State.HOVERED_SELECTED
 			
-			if hex_grid.selected_hex:
+			if hex_grid.selected_hex and hex_grid.selected_hex != self:
 				hex_grid.selected_hex.select_deselect()
 			hex_grid.selected_hex = self
 	
@@ -342,6 +370,8 @@ func get_state_color(_state) -> Color:
 				var translucent_color: Color = COLORS[0]
 				translucent_color.a = 0.5
 				return translucent_color
+			elif clue_type != HexData.ClueType.DEFAULT:
+				return COLORS[11]
 			
 			return COLORS[number]
 		State.HOVERED:
@@ -349,6 +379,8 @@ func get_state_color(_state) -> Color:
 				var translucent_color: Color = HOVERED_COLORS[0]
 				translucent_color.a = 0.5
 				return translucent_color
+			elif clue_type != HexData.ClueType.DEFAULT:
+				return HOVERED_COLORS[11]
 			
 			return HOVERED_COLORS[number]
 		State.SELECTED, State.HOVERED_SELECTED:
@@ -356,6 +388,8 @@ func get_state_color(_state) -> Color:
 				var translucent_color: Color = SELECTED_COLORS[0]
 				translucent_color.a = 0.5
 				return translucent_color
+			elif clue_type != HexData.ClueType.DEFAULT:
+				return SELECTED_COLORS[11]
 			
 			return SELECTED_COLORS[number]
 	
