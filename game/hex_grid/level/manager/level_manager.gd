@@ -9,6 +9,14 @@ var levels: Array[LevelData] = []
 
 
 func _ready() -> void:
+	find_levels()
+	
+	load_level(current_level)
+
+
+func find_levels() -> void:
+	levels = []
+	
 	var i: int = 0
 	var path: String = "res://game/hex_grid/level/data/levels/level_%d.tres" % i
 	
@@ -17,8 +25,6 @@ func _ready() -> void:
 		
 		i += 1
 		path = "res://game/hex_grid/level/data/levels/level_%d.tres" % i
-	
-	load_level(current_level)
 
 
 func next_level() -> void:
