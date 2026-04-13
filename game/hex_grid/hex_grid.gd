@@ -319,6 +319,8 @@ func do_dissolve_end(last_selected_hex: Hex) -> void:
 	var end_anim_shader: Shader = Hex.END_SHADERS[Hex.EndShader.DISSOLVE]
 	var untouched_hexes: Array[Vector2i] = []
 	
+	var last_changed_noise_texture: NoiseTexture2D
+	
 	for pos in grid_hexes:
 		untouched_hexes.append(pos)
 		
@@ -326,14 +328,18 @@ func do_dissolve_end(last_selected_hex: Hex) -> void:
 		
 		var hex_material := ShaderMaterial.new()
 		hex_material.shader = end_anim_shader
+		
 		var noise_texture := NoiseTexture2D.new()
+		last_changed_noise_texture = noise_texture
+		
 		var noise := FastNoiseLite.new()
 		noise.frequency = 0.01
 		noise_texture.noise = noise
-		await noise_texture.changed
 		hex_material.set_shader_parameter("noise", noise_texture)
 		
 		hex.material = hex_material
+	
+	await last_changed_noise_texture.changed
 	
 	var prev_gen: Array[Vector2i] = []
 	
