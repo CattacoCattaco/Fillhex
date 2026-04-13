@@ -216,7 +216,7 @@ func _gui_input(event: InputEvent) -> void:
 		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
 			if number == -1:
 				number = 0
-			elif not given:
+			elif is_tool or not given:
 				select_deselect()
 			elif hex_grid.selected_hex:
 				hex_grid.selected_hex.select_deselect()
@@ -231,9 +231,6 @@ func _gui_input(event: InputEvent) -> void:
 
 
 func _mouse_entered() -> void:
-	if given:
-		return
-	
 	if state == State.NORMAL:
 		state = State.HOVERED
 	elif state == State.SELECTED:
@@ -243,9 +240,6 @@ func _mouse_entered() -> void:
 
 
 func _mouse_exited() -> void:
-	if given:
-		return
-	
 	if state == State.HOVERED:
 		state = State.NORMAL
 	elif state == State.HOVERED_SELECTED:

@@ -1,16 +1,56 @@
-[gd_resource type="Resource" script_class="LevelData" load_steps=2 format=3 uid="uid://cjax5h5ovghcy"]
+[gd_resource type="Resource" script_class="LevelData" format=3 uid="uid://cjax5h5ovghcy"]
 
+[ext_resource type="Script" uid="uid://c6v7pw3whrr78" path="res://game/hex_grid/hex/hex_state/hex_data.gd" id="1_e05gh"]
 [ext_resource type="Script" uid="uid://hu5ar83kekht" path="res://game/hex_grid/level/data/level_data.gd" id="1_vsc0m"]
+
+[sub_resource type="Resource" id="Resource_e05gh"]
+script = ExtResource("1_e05gh")
+number = 4
+given = true
+
+[sub_resource type="Resource" id="Resource_qoa0e"]
+script = ExtResource("1_e05gh")
+given = true
+
+[sub_resource type="Resource" id="Resource_m2gi4"]
+script = ExtResource("1_e05gh")
+given = true
+
+[sub_resource type="Resource" id="Resource_2qfi6"]
+script = ExtResource("1_e05gh")
+number = 3
+given = true
+
+[sub_resource type="Resource" id="Resource_cnmmu"]
+script = ExtResource("1_e05gh")
+given = true
+
+[sub_resource type="Resource" id="Resource_rene0"]
+script = ExtResource("1_e05gh")
+given = true
+
+[sub_resource type="Resource" id="Resource_g2eai"]
+script = ExtResource("1_e05gh")
+given = true
 
 [resource]
 script = ExtResource("1_vsc0m")
-hexes = Dictionary[Vector2i, int]({
-Vector2i(-1, 0): 4,
-Vector2i(-1, 1): 0,
-Vector2i(0, -1): 0,
-Vector2i(0, 0): 3,
-Vector2i(0, 1): 0,
-Vector2i(1, -1): 0,
-Vector2i(1, 0): 0
+hexes = Dictionary[Vector2i, ExtResource("1_e05gh")]({
+Vector2i(-1, 0): SubResource("Resource_e05gh"),
+Vector2i(-1, 1): SubResource("Resource_qoa0e"),
+Vector2i(0, -1): SubResource("Resource_m2gi4"),
+Vector2i(0, 0): SubResource("Resource_2qfi6"),
+Vector2i(0, 1): SubResource("Resource_cnmmu"),
+Vector2i(1, -1): SubResource("Resource_rene0"),
+Vector2i(1, 0): SubResource("Resource_g2eai")
+})
+new_hexes = Dictionary[Vector2i, ExtResource("1_e05gh")]({
+Vector2i(-1, 0): SubResource("Resource_e05gh"),
+Vector2i(-1, 1): SubResource("Resource_qoa0e"),
+Vector2i(0, -1): SubResource("Resource_m2gi4"),
+Vector2i(0, 0): SubResource("Resource_2qfi6"),
+Vector2i(0, 1): SubResource("Resource_cnmmu"),
+Vector2i(1, -1): SubResource("Resource_rene0"),
+Vector2i(1, 0): SubResource("Resource_g2eai")
 })
 metadata/_custom_type_script = "uid://hu5ar83kekht"

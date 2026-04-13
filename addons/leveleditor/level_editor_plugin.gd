@@ -28,7 +28,8 @@ func _has_main_screen():
 
 func _edit(object: Object) -> void:
 	if object is LevelData:
-		main_panel_instance.hex_grid.level = object
+		var level_num: int = object.resource_path.to_int()
+		main_panel_instance.level_manager.load_level(level_num)
 
 
 func _make_visible(visible):

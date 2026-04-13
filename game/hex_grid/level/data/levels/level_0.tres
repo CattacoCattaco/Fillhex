@@ -1,16 +1,47 @@
-[gd_resource type="Resource" script_class="LevelData" load_steps=2 format=3 uid="uid://cmt8emqcin82n"]
+[gd_resource type="Resource" script_class="LevelData" format=3 uid="uid://cmt8emqcin82n"]
 
 [ext_resource type="Script" uid="uid://hu5ar83kekht" path="res://game/hex_grid/level/data/level_data.gd" id="1_ethaq"]
+[ext_resource type="Script" uid="uid://c6v7pw3whrr78" path="res://game/hex_grid/hex/hex_state/hex_data.gd" id="1_wvuut"]
+
+[sub_resource type="Resource" id="Resource_wvuut"]
+script = ExtResource("1_wvuut")
+number = 2
+given = true
+
+[sub_resource type="Resource" id="Resource_5uwsm"]
+script = ExtResource("1_wvuut")
+number = 4
+state = 3
+given = true
+
+[sub_resource type="Resource" id="Resource_4cw2y"]
+script = ExtResource("1_wvuut")
+
+[sub_resource type="Resource" id="Resource_0lalt"]
+script = ExtResource("1_wvuut")
+number = 4
+given = true
+
+[sub_resource type="Resource" id="Resource_e341w"]
+script = ExtResource("1_wvuut")
+
+[sub_resource type="Resource" id="Resource_852fs"]
+script = ExtResource("1_wvuut")
+
+[sub_resource type="Resource" id="Resource_vlahx"]
+script = ExtResource("1_wvuut")
+number = 1
+given = true
 
 [resource]
 script = ExtResource("1_ethaq")
-hexes = Dictionary[Vector2i, int]({
-Vector2i(-1, 0): 2,
-Vector2i(-1, 1): 4,
-Vector2i(0, -1): 0,
-Vector2i(0, 0): 4,
-Vector2i(0, 1): 0,
-Vector2i(1, -1): 0,
-Vector2i(1, 0): 1
+hexes = Dictionary[Vector2i, ExtResource("1_wvuut")]({
+Vector2i(-1, 0): SubResource("Resource_wvuut"),
+Vector2i(-1, 1): SubResource("Resource_5uwsm"),
+Vector2i(0, -1): SubResource("Resource_4cw2y"),
+Vector2i(0, 0): SubResource("Resource_0lalt"),
+Vector2i(0, 1): SubResource("Resource_e341w"),
+Vector2i(1, -1): SubResource("Resource_852fs"),
+Vector2i(1, 0): SubResource("Resource_vlahx")
 })
 metadata/_custom_type_script = "uid://hu5ar83kekht"

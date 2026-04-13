@@ -1,28 +1,132 @@
-[gd_resource type="Resource" script_class="LevelData" load_steps=2 format=3 uid="uid://csouv5yx0tukc"]
+[gd_resource type="Resource" script_class="LevelData" format=3 uid="uid://csouv5yx0tukc"]
 
 [ext_resource type="Script" uid="uid://hu5ar83kekht" path="res://game/hex_grid/level/data/level_data.gd" id="1_bh4jc"]
+[ext_resource type="Script" uid="uid://c6v7pw3whrr78" path="res://game/hex_grid/hex/hex_state/hex_data.gd" id="1_w3dps"]
+
+[sub_resource type="Resource" id="Resource_t33a4"]
+script = ExtResource("1_w3dps")
+given = true
+
+[sub_resource type="Resource" id="Resource_gyu8n"]
+script = ExtResource("1_w3dps")
+given = true
+
+[sub_resource type="Resource" id="Resource_mpa7u"]
+script = ExtResource("1_w3dps")
+number = 8
+given = true
+
+[sub_resource type="Resource" id="Resource_wfo2f"]
+script = ExtResource("1_w3dps")
+given = true
+
+[sub_resource type="Resource" id="Resource_hpvmp"]
+script = ExtResource("1_w3dps")
+given = true
+
+[sub_resource type="Resource" id="Resource_hgtyn"]
+script = ExtResource("1_w3dps")
+given = true
+
+[sub_resource type="Resource" id="Resource_jaf6p"]
+script = ExtResource("1_w3dps")
+given = true
+
+[sub_resource type="Resource" id="Resource_nobyi"]
+script = ExtResource("1_w3dps")
+given = true
+
+[sub_resource type="Resource" id="Resource_681rx"]
+script = ExtResource("1_w3dps")
+number = 9
+given = true
+
+[sub_resource type="Resource" id="Resource_i6uik"]
+script = ExtResource("1_w3dps")
+given = true
+
+[sub_resource type="Resource" id="Resource_bankg"]
+script = ExtResource("1_w3dps")
+given = true
+
+[sub_resource type="Resource" id="Resource_u2673"]
+script = ExtResource("1_w3dps")
+given = true
+
+[sub_resource type="Resource" id="Resource_dn3vu"]
+script = ExtResource("1_w3dps")
+given = true
+
+[sub_resource type="Resource" id="Resource_jbj11"]
+script = ExtResource("1_w3dps")
+given = true
+
+[sub_resource type="Resource" id="Resource_am0ys"]
+script = ExtResource("1_w3dps")
+given = true
+
+[sub_resource type="Resource" id="Resource_2guu3"]
+script = ExtResource("1_w3dps")
+number = 9
+given = true
+
+[sub_resource type="Resource" id="Resource_8tuhk"]
+script = ExtResource("1_w3dps")
+number = 8
+given = true
+
+[sub_resource type="Resource" id="Resource_ksqid"]
+script = ExtResource("1_w3dps")
+number = 2
+given = true
+
+[sub_resource type="Resource" id="Resource_vslii"]
+script = ExtResource("1_w3dps")
+number = 2
+given = true
 
 [resource]
 script = ExtResource("1_bh4jc")
-hexes = Dictionary[Vector2i, int]({
-Vector2i(-2, 0): 0,
-Vector2i(-2, 1): 0,
-Vector2i(-2, 2): 8,
-Vector2i(-1, -1): 0,
-Vector2i(-1, 0): 0,
-Vector2i(-1, 1): 0,
-Vector2i(-1, 2): 0,
-Vector2i(0, -2): 0,
-Vector2i(0, -1): 9,
-Vector2i(0, 0): 0,
-Vector2i(0, 1): 0,
-Vector2i(0, 2): 0,
-Vector2i(1, -2): 0,
-Vector2i(1, -1): 0,
-Vector2i(1, 0): 0,
-Vector2i(1, 1): 9,
-Vector2i(2, -2): 8,
-Vector2i(2, -1): 2,
-Vector2i(2, 0): 2
+hexes = Dictionary[Vector2i, ExtResource("1_w3dps")]({
+Vector2i(-2, 0): SubResource("Resource_t33a4"),
+Vector2i(-2, 1): SubResource("Resource_gyu8n"),
+Vector2i(-2, 2): SubResource("Resource_mpa7u"),
+Vector2i(-1, -1): SubResource("Resource_wfo2f"),
+Vector2i(-1, 0): SubResource("Resource_hpvmp"),
+Vector2i(-1, 1): SubResource("Resource_hgtyn"),
+Vector2i(-1, 2): SubResource("Resource_jaf6p"),
+Vector2i(0, -2): SubResource("Resource_nobyi"),
+Vector2i(0, -1): SubResource("Resource_681rx"),
+Vector2i(0, 0): SubResource("Resource_i6uik"),
+Vector2i(0, 1): SubResource("Resource_bankg"),
+Vector2i(0, 2): SubResource("Resource_u2673"),
+Vector2i(1, -2): SubResource("Resource_dn3vu"),
+Vector2i(1, -1): SubResource("Resource_jbj11"),
+Vector2i(1, 0): SubResource("Resource_am0ys"),
+Vector2i(1, 1): SubResource("Resource_2guu3"),
+Vector2i(2, -2): SubResource("Resource_8tuhk"),
+Vector2i(2, -1): SubResource("Resource_ksqid"),
+Vector2i(2, 0): SubResource("Resource_vslii")
+})
+new_hexes = Dictionary[Vector2i, ExtResource("1_w3dps")]({
+Vector2i(-2, 0): SubResource("Resource_t33a4"),
+Vector2i(-2, 1): SubResource("Resource_gyu8n"),
+Vector2i(-2, 2): SubResource("Resource_mpa7u"),
+Vector2i(-1, -1): SubResource("Resource_wfo2f"),
+Vector2i(-1, 0): SubResource("Resource_hpvmp"),
+Vector2i(-1, 1): SubResource("Resource_hgtyn"),
+Vector2i(-1, 2): SubResource("Resource_jaf6p"),
+Vector2i(0, -2): SubResource("Resource_nobyi"),
+Vector2i(0, -1): SubResource("Resource_681rx"),
+Vector2i(0, 0): SubResource("Resource_i6uik"),
+Vector2i(0, 1): SubResource("Resource_bankg"),
+Vector2i(0, 2): SubResource("Resource_u2673"),
+Vector2i(1, -2): SubResource("Resource_dn3vu"),
+Vector2i(1, -1): SubResource("Resource_jbj11"),
+Vector2i(1, 0): SubResource("Resource_am0ys"),
+Vector2i(1, 1): SubResource("Resource_2guu3"),
+Vector2i(2, -2): SubResource("Resource_8tuhk"),
+Vector2i(2, -1): SubResource("Resource_ksqid"),
+Vector2i(2, 0): SubResource("Resource_vslii")
 })
 metadata/_custom_type_script = "uid://hu5ar83kekht"

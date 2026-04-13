@@ -100,7 +100,7 @@ func display() -> void:
 	
 	selected_hex = null
 	
-	var starting_hexes: Dictionary[Vector2i, int] = level.hexes.duplicate()
+	var starting_hexes: Dictionary[Vector2i, HexData] = level.hexes.duplicate()
 	
 	if is_tool:
 		var radius: int = 0
@@ -112,7 +112,7 @@ func display() -> void:
 		
 		for pos in get_tiles_in_radius(radius):
 			if pos not in starting_hexes:
-				starting_hexes[pos] = -1
+				starting_hexes[pos] = HexData.new(-1)
 	
 	var hex_size := Vector2(1, sqrt(3) / 2)
 	
@@ -154,11 +154,7 @@ func display() -> void:
 		var hex := Hex.new()
 		
 		if not hex_data.has(pos):
-			var number: int = starting_hexes[pos]
-			var state: Hex.State = Hex.State.NORMAL
-			var is_given: bool = starting_hexes[pos] != 0 and not is_tool
-			
-			hex_data[pos] = HexData.new(number, state, is_given)
+			hex_data[pos] = starting_hexes[pos]
 		
 		hex.hex_grid = self
 		hex.pos = pos
@@ -449,7 +445,8 @@ func save_level() -> void:
 		if hex_data[pos].number == -1:
 			p_level.hexes.erase(pos)
 		else:
-			p_level.hexes[pos] = hex_data[pos].number
+			p_level.hexes[pos] = hex_data[pos]
+			p_level.hexes[pos].given = hex_data[pos].number != 0
 	
 	ResourceSaver.save(p_level)
 	
