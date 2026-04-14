@@ -99,9 +99,14 @@ const END_SHADERS: Array[Shader] = [
 	set(value):
 		clue_type = value
 		if not hex_grid.in_setup:
-			hex_grid.hex_data[pos].clue_type = clue_type
+			hex_grid.hex_data[pos].clue_type = value
 		queue_redraw()
 		tween_to_state()
+		
+		if not is_tool:
+			hex_grid.check_for_solution()
+		elif not hex_grid.in_setup:
+			hex_grid.save_level()
 
 @export var update: bool = false:
 	set(value):
@@ -203,11 +208,78 @@ func _draw() -> void:
 				var points: PackedVector2Array
 				points = get_regular_polygon(center, text_width * 0.85, 3)
 				draw_polyline(points, BLACK, line_thickness)
+			HexData.ClueType.RECTANGLE:
+				var height: float = (font_size + scale_factor * 0.24 + line_thickness * 2)
+				var width: float = (text_width + scale_factor * 0.16 + line_thickness)
+				
+				var half_thickness: float =  line_thickness / 2
+				var start_x: float = text_pos.x - scale_factor * 0.08 - half_thickness
+				var start_y: float = text_pos.y - font_size - scale_factor * 0.08 - half_thickness
+				
+				var rect := Rect2(start_x, start_y, width, height)
+				
+				draw_rect(rect, BLACK, false, line_thickness)
 
 
 func _input(event: InputEvent) -> void:
 	if event is InputEventKey and is_selected():
-		if event.is_action_pressed("hex_1"):
+		if event.is_action_pressed("hex_10s"):
+			if not (is_tool and clue_type == HexData.ClueType.RECTANGLE):
+				return
+			
+			if 11 <= number and number <= 19:
+				number -= 10
+			else:
+				number = number % 10 + 10
+		elif event.is_action_pressed("hex_20s"):
+			if not (is_tool and clue_type == HexData.ClueType.RECTANGLE):
+				return
+			
+			if 21 <= number and number <= 29:
+				number -= 20
+			elif number == 20:
+				number = 10
+			else:
+				number = number % 10 + 20
+		elif event.is_action_pressed("hex_30s"):
+			if not (is_tool and clue_type == HexData.ClueType.RECTANGLE):
+				return
+			
+			if 31 <= number and number <= 39:
+				number -= 30
+			elif number == 30:
+				number = 10
+			else:
+				number = number % 10 + 30
+		elif event.is_action_pressed("hex_40s"):
+			if not (is_tool and clue_type == HexData.ClueType.RECTANGLE):
+				return
+			
+			if 41 <= number and number <= 49:
+				number -= 40
+			elif number == 40:
+				number = 10
+			else:
+				number = number % 10 + 40
+		elif event.is_action_pressed("hex_20s"):
+			if not (is_tool and clue_type == HexData.ClueType.RECTANGLE):
+				return
+			
+			if 51 <= number and number <= 59:
+				number -= 50
+			elif number == 50:
+				number = 10
+			else:
+				number = number % 10 + 50
+		elif event.is_action_pressed("hex_60"):
+			if not (is_tool and clue_type == HexData.ClueType.RECTANGLE):
+				return
+			
+			if number == 60:
+				number = 10
+			else:
+				number = 60
+		elif event.is_action_pressed("hex_1"):
 			number = 1
 		elif event.is_action_pressed("hex_2"):
 			number = 2
@@ -247,6 +319,17 @@ func _input(event: InputEvent) -> void:
 				if clue_type != HexData.ClueType.TRIANGLE:
 					clue_type = HexData.ClueType.TRIANGLE
 				else:
+					clue_type = HexData.ClueType.DEFAULT
+		elif event.is_action_pressed("hex_rectangle"):
+			if is_tool:
+				if clue_type != HexData.ClueType.RECTANGLE:
+					clue_type = HexData.ClueType.RECTANGLE
+				else:
+					if number > 10:
+						number = number % 10
+						if number == 0:
+							number = 10
+					
 					clue_type = HexData.ClueType.DEFAULT
 
 
@@ -395,7 +478,7 @@ func get_state_color(_state) -> Color:
 				var translucent_color: Color = COLORS[0]
 				translucent_color.a = 0.5
 				return translucent_color
-			elif clue_type != HexData.ClueType.DEFAULT:
+			elif clue_type != HexData.ClueType.DEFAULT or number > 10:
 				return COLORS[11]
 			
 			return COLORS[number]
@@ -404,7 +487,7 @@ func get_state_color(_state) -> Color:
 				var translucent_color: Color = HOVERED_COLORS[0]
 				translucent_color.a = 0.5
 				return translucent_color
-			elif clue_type != HexData.ClueType.DEFAULT:
+			elif clue_type != HexData.ClueType.DEFAULT or number > 10:
 				return HOVERED_COLORS[11]
 			
 			return HOVERED_COLORS[number]
@@ -413,7 +496,7 @@ func get_state_color(_state) -> Color:
 				var translucent_color: Color = SELECTED_COLORS[0]
 				translucent_color.a = 0.5
 				return translucent_color
-			elif clue_type != HexData.ClueType.DEFAULT:
+			elif clue_type != HexData.ClueType.DEFAULT or number > 10:
 				return SELECTED_COLORS[11]
 			
 			return SELECTED_COLORS[number]

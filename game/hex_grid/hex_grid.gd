@@ -261,6 +261,25 @@ func check_for_solution() -> void:
 					success = false
 				
 				unchecked_hexes.pop_back()
+			HexData.ClueType.RECTANGLE:
+				var sum: int = 0
+				
+				for neighbor_pos in get_neighbors(hex.pos):
+					var neighbor: Hex = grid_hexes[neighbor_pos]
+					if neighbor.number > 0:
+						sum += neighbor.number
+				
+				if sum < hex.number:
+					hex.fulfillment = Hex.Fulfillment.UNFULFILLED
+				elif sum == hex.number:
+					hex.fulfillment = Hex.Fulfillment.FULFILLED
+				else:
+					hex.fulfillment = Hex.Fulfillment.OVERDONE
+				
+				if hex.fulfillment != Hex.Fulfillment.FULFILLED:
+					success = false
+				
+				unchecked_hexes.pop_back()
 	
 	if success:
 		print("You win")
