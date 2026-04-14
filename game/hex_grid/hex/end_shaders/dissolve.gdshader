@@ -8,7 +8,7 @@ void vertex() {
 }
 
 void fragment() {
-	float noise_value = texture(noise, UV).r;
+	float noise_value = texture(noise, SCREEN_UV).r;
 	COLOR.a = COLOR.a * max(1.0 - (time / noise_value), 0);
 }
 

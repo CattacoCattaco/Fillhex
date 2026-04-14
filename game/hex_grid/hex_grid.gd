@@ -51,10 +51,13 @@ var offset := Vector2(0, 0):
 		offset = value
 		display()
 
+var noise_texture: NoiseTexture2D
+
 
 func _ready() -> void:
 	add_child(coord_converter)
 	display()
+	regenerate_noise_texture()
 
 
 func _gui_input(event: InputEvent) -> void:
@@ -389,27 +392,8 @@ func do_dissolve_end(last_selected_hex: Hex) -> void:
 	var end_anim_shader: Shader = Hex.END_SHADERS[Hex.EndShader.DISSOLVE]
 	var untouched_hexes: Array[Vector2i] = []
 	
-	var last_changed_noise_texture: NoiseTexture2D
-	
 	for pos in grid_hexes:
 		untouched_hexes.append(pos)
-		
-		var hex: Hex = grid_hexes[pos]
-		
-		var hex_material := ShaderMaterial.new()
-		hex_material.shader = end_anim_shader
-		
-		var noise_texture := NoiseTexture2D.new()
-		last_changed_noise_texture = noise_texture
-		
-		var noise := FastNoiseLite.new()
-		noise.frequency = 0.01
-		noise_texture.noise = noise
-		hex_material.set_shader_parameter("noise", noise_texture)
-		
-		hex.material = hex_material
-	
-	await last_changed_noise_texture.changed
 	
 	var prev_gen: Array[Vector2i] = []
 	
@@ -439,11 +423,20 @@ func do_dissolve_end(last_selected_hex: Hex) -> void:
 			
 			hex.z_index = 6
 			
+			var hex_material := ShaderMaterial.new()
+			hex_material.shader = end_anim_shader
+			
+			hex_material.set_shader_parameter("noise", noise_texture)
+			
+			hex.material = hex_material
+			
 			tween.tween_method(hex.set_shader_time, 0.0, 1.0, 2.5)
 		
 		await get_tree().create_timer(2).timeout
 		
 		prev_gen = new_gen
+	
+	regenerate_noise_texture()
 
 
 func get_group(pos: Vector2i, found: Array[Vector2i] = []) -> Array[Vector2i]:
@@ -511,6 +504,18 @@ func get_triangle_of_hexes(from: Vector2i, direction_a: Vector2i, direction_b: V
 			found.append(from + direction_a * i + direction_b * (distance - i))
 	
 	return found
+
+
+func regenerate_noise_texture() -> void:
+	noise_texture = NoiseTexture2D.new()
+	noise_texture.width = 1024
+	noise_texture.height = 1024
+	
+	var noise := FastNoiseLite.new()
+	noise.frequency = 0.005
+	noise_texture.noise = noise
+	
+	await noise_texture.changed
 
 
 func save_level() -> void:
