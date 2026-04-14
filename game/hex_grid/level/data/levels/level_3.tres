@@ -28,13 +28,13 @@ script = ExtResource("1_kpna5")
 [sub_resource type="Resource" id="Resource_w34b7"]
 script = ExtResource("1_kpna5")
 
-[sub_resource type="Resource" id="Resource_mq1qq"]
-script = ExtResource("1_kpna5")
-state = 1
-
 [sub_resource type="Resource" id="Resource_kpna5"]
 script = ExtResource("1_kpna5")
 state = 2
+
+[sub_resource type="Resource" id="Resource_mq1qq"]
+script = ExtResource("1_kpna5")
+state = 1
 
 [resource]
 script = ExtResource("1_2vs3q")

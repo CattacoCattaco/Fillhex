@@ -102,6 +102,10 @@ given = true
 [sub_resource type="Resource" id="Resource_oq5id"]
 script = ExtResource("1_yyfrt")
 
+[sub_resource type="Resource" id="Resource_saqqq"]
+script = ExtResource("1_yyfrt")
+state = 3
+
 [sub_resource type="Resource" id="Resource_d8vev"]
 script = ExtResource("1_yyfrt")
 
@@ -194,10 +198,6 @@ given = true
 
 [sub_resource type="Resource" id="Resource_et0y0"]
 script = ExtResource("1_yyfrt")
-
-[sub_resource type="Resource" id="Resource_saqqq"]
-script = ExtResource("1_yyfrt")
-state = 3
 
 [resource]
 script = ExtResource("1_rp3ge")

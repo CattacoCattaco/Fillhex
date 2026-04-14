@@ -234,6 +234,33 @@ func check_for_solution() -> void:
 					success = false
 				
 				unchecked_hexes.pop_back()
+			HexData.ClueType.TRIANGLE:
+				var appearance_counts: Array[int] = []
+				for i in range(10):
+					appearance_counts.append(0)
+				
+				for neighbor_pos in get_neighbors(hex.pos):
+					var neighbor: Hex = grid_hexes[neighbor_pos]
+					if neighbor.number > 0:
+						appearance_counts[neighbor.number - 1] += 1
+				
+				var biggest_appearance_count: int = 0
+				
+				for appearance_count in appearance_counts:
+					if appearance_count > biggest_appearance_count:
+						biggest_appearance_count = appearance_count
+				
+				if biggest_appearance_count < hex.number:
+					hex.fulfillment = Hex.Fulfillment.UNFULFILLED
+				elif biggest_appearance_count == hex.number:
+					hex.fulfillment = Hex.Fulfillment.FULFILLED
+				else:
+					hex.fulfillment = Hex.Fulfillment.OVERDONE
+				
+				if hex.fulfillment != Hex.Fulfillment.FULFILLED:
+					success = false
+				
+				unchecked_hexes.pop_back()
 	
 	if success:
 		print("You win")

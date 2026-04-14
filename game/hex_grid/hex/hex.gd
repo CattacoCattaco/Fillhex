@@ -197,7 +197,12 @@ func _draw() -> void:
 		
 		match clue_type:
 			HexData.ClueType.CIRCLE:
-				draw_circle(hex_center, text_width * 1.25, Color.BLACK, false, line_thickness)
+				draw_circle(hex_center, text_width * 1.25, BLACK, false, line_thickness)
+			HexData.ClueType.TRIANGLE:
+				var center := Vector2(hex_center.x, hex_center.y * 1.15)
+				var points: PackedVector2Array
+				points = get_regular_polygon(center, text_width * 0.85, 3)
+				draw_polyline(points, BLACK, line_thickness)
 
 
 func _input(event: InputEvent) -> void:
@@ -237,6 +242,13 @@ func _input(event: InputEvent) -> void:
 					clue_type = HexData.ClueType.CIRCLE
 				else:
 					clue_type = HexData.ClueType.DEFAULT
+		elif event.is_action_pressed("hex_triangle"):
+			if is_tool:
+				if clue_type != HexData.ClueType.TRIANGLE:
+					clue_type = HexData.ClueType.TRIANGLE
+				else:
+					clue_type = HexData.ClueType.DEFAULT
+
 
 func _gui_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton:
@@ -345,6 +357,19 @@ func get_hex_zoomed() -> PackedVector2Array:
 		zoomed[i] = zoomed[i] * zoom_factor + offset
 	
 	return zoomed
+
+
+## Returns the points of a regular polygon for special clues
+func get_regular_polygon(center: Vector2, apothem: float, side_count: int) -> PackedVector2Array:
+	var circumradius: float = apothem / cos(PI / side_count)
+	
+	var points := PackedVector2Array()
+	
+	for i in range(side_count + 1):
+		var theta: float = 2 * PI * i / side_count
+		points.append(center + circumradius * Vector2(sin(theta), -cos(theta)))
+	
+	return points
 
 
 func tween_to_state() -> void:

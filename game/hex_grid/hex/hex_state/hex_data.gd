@@ -4,7 +4,8 @@ extends Resource
 enum ClueType {
 	DEFAULT, # Not a special clue, just a normal number
 	CIRCLE,
-	SQUARE,
+	TRIANGLE,
+	RECTANGLE,
 }
 
 @export var number: int

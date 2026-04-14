@@ -24,14 +24,14 @@ script = ExtResource("1_sr2xo")
 [sub_resource type="Resource" id="Resource_e341w"]
 script = ExtResource("1_sr2xo")
 
-[sub_resource type="Resource" id="Resource_vlahx"]
-script = ExtResource("1_sr2xo")
-
 [sub_resource type="Resource" id="Resource_852fs"]
 script = ExtResource("1_sr2xo")
 number = 1
 given = true
 clue_type = 1
+
+[sub_resource type="Resource" id="Resource_vlahx"]
+script = ExtResource("1_sr2xo")
 
 [resource]
 script = ExtResource("2_x653c")
