@@ -378,6 +378,9 @@ func _input(event: InputEvent) -> void:
 		elif event.is_action_pressed("hex_top_right"):
 			if is_tool:
 				flip_border(HexGrid.Orthogonal.UP_RIGHT, HexGrid.Orthogonal.DOWN_LEFT)
+		else:
+			return
+		get_viewport().set_input_as_handled()
 
 
 func _gui_input(event: InputEvent) -> void:

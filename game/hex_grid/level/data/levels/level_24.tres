@@ -1,0 +1,113 @@
+[gd_resource type="Resource" script_class="LevelData" format=3 uid="uid://drxti6csj07o8"]
+
+[ext_resource type="Script" uid="uid://c6v7pw3whrr78" path="res://game/hex_grid/hex/hex_state/hex_data.gd" id="1_uj64q"]
+[ext_resource type="Script" uid="uid://hu5ar83kekht" path="res://game/hex_grid/level/data/level_data.gd" id="2_naqf6"]
+
+[sub_resource type="Resource" id="Resource_7guvf"]
+script = ExtResource("1_uj64q")
+
+[sub_resource type="Resource" id="Resource_atvyf"]
+script = ExtResource("1_uj64q")
+number = 2
+given = true
+clue_type = 2
+borders = 4
+
+[sub_resource type="Resource" id="Resource_n3xfs"]
+script = ExtResource("1_uj64q")
+borders = 12
+
+[sub_resource type="Resource" id="Resource_kyr1y"]
+script = ExtResource("1_uj64q")
+borders = 8
+
+[sub_resource type="Resource" id="Resource_m05ac"]
+script = ExtResource("1_uj64q")
+
+[sub_resource type="Resource" id="Resource_bt54i"]
+script = ExtResource("1_uj64q")
+number = 4
+given = true
+borders = 32
+
+[sub_resource type="Resource" id="Resource_serg2"]
+script = ExtResource("1_uj64q")
+borders = 1
+
+[sub_resource type="Resource" id="Resource_1mooc"]
+script = ExtResource("1_uj64q")
+borders = 37
+
+[sub_resource type="Resource" id="Resource_bhy7j"]
+script = ExtResource("1_uj64q")
+number = 5
+given = true
+clue_type = 1
+
+[sub_resource type="Resource" id="Resource_udrgq"]
+script = ExtResource("1_uj64q")
+borders = 8
+
+[sub_resource type="Resource" id="Resource_4b338"]
+script = ExtResource("1_uj64q")
+
+[sub_resource type="Resource" id="Resource_gwijb"]
+script = ExtResource("1_uj64q")
+borders = 2
+
+[sub_resource type="Resource" id="Resource_c5q0y"]
+script = ExtResource("1_uj64q")
+borders = 19
+
+[sub_resource type="Resource" id="Resource_1882m"]
+script = ExtResource("1_uj64q")
+borders = 16
+
+[sub_resource type="Resource" id="Resource_1k3u3"]
+script = ExtResource("1_uj64q")
+borders = 1
+
+[sub_resource type="Resource" id="Resource_17td5"]
+script = ExtResource("1_uj64q")
+borders = 32
+
+[sub_resource type="Resource" id="Resource_qit02"]
+script = ExtResource("1_uj64q")
+number = 1
+given = true
+clue_type = 2
+metadata/_custom_type_script = "uid://c6v7pw3whrr78"
+
+[sub_resource type="Resource" id="Resource_lordf"]
+script = ExtResource("1_uj64q")
+number = 4
+given = true
+
+[sub_resource type="Resource" id="Resource_cpvf7"]
+script = ExtResource("1_uj64q")
+borders = 62
+
+[resource]
+script = ExtResource("2_naqf6")
+hexes = Dictionary[Vector2i, ExtResource("1_uj64q")]({
+Vector2i(-2, 0): SubResource("Resource_lordf"),
+Vector2i(-2, 1): SubResource("Resource_7guvf"),
+Vector2i(-2, 2): SubResource("Resource_atvyf"),
+Vector2i(-1, -1): SubResource("Resource_n3xfs"),
+Vector2i(-1, 0): SubResource("Resource_kyr1y"),
+Vector2i(-1, 1): SubResource("Resource_m05ac"),
+Vector2i(-1, 2): SubResource("Resource_bt54i"),
+Vector2i(0, -2): SubResource("Resource_serg2"),
+Vector2i(0, -1): SubResource("Resource_1mooc"),
+Vector2i(0, 0): SubResource("Resource_bhy7j"),
+Vector2i(0, 1): SubResource("Resource_udrgq"),
+Vector2i(0, 2): SubResource("Resource_4b338"),
+Vector2i(1, -2): SubResource("Resource_gwijb"),
+Vector2i(1, -1): SubResource("Resource_cpvf7"),
+Vector2i(1, 0): SubResource("Resource_c5q0y"),
+Vector2i(1, 1): SubResource("Resource_1882m"),
+Vector2i(2, -2): SubResource("Resource_1k3u3"),
+Vector2i(2, -1): SubResource("Resource_17td5"),
+Vector2i(2, 0): SubResource("Resource_qit02")
+})
+metadata/_custom_type_script = "uid://hu5ar83kekht"
