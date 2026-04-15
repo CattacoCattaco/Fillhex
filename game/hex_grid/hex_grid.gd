@@ -77,9 +77,15 @@ func _gui_input(event: InputEvent) -> void:
 					if not in_end:
 						selected_hex.select_deselect()
 			elif event.button_index == MOUSE_BUTTON_WHEEL_UP:
+				if in_end:
+					return
+				
 				offset *= zoom_factor_per_scroll
 				zoom *= zoom_factor_per_scroll
 			elif event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
+				if in_end:
+					return
+				
 				if zoom / zoom_factor_per_scroll <= 1:
 					offset = offset / zoom
 					zoom = 1
@@ -89,6 +95,9 @@ func _gui_input(event: InputEvent) -> void:
 				zoom /= zoom_factor_per_scroll
 	elif event is InputEventMouseMotion:
 		if Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
+			if in_end:
+				return
+			
 			offset += event.relative
 
 
@@ -248,14 +257,7 @@ func check_for_solution() -> void:
 				
 				unchecked_hexes.pop_back()
 			HexData.ClueType.TRIANGLE:
-				var appearance_counts: Array[int] = []
-				for i in range(10):
-					appearance_counts.append(0)
-				
-				for neighbor_pos in get_neighbors(hex.pos):
-					var neighbor: Hex = grid_hexes[neighbor_pos]
-					if neighbor.number > 0:
-						appearance_counts[neighbor.number - 1] += 1
+				var appearance_counts: Array[int] = get_appearance_counts(hex.pos)
 				
 				var biggest_appearance_count: int = 0
 				
@@ -285,6 +287,26 @@ func check_for_solution() -> void:
 				if sum < hex.number:
 					hex.fulfillment = Hex.Fulfillment.UNFULFILLED
 				elif sum == hex.number:
+					hex.fulfillment = Hex.Fulfillment.FULFILLED
+				else:
+					hex.fulfillment = Hex.Fulfillment.OVERDONE
+				
+				if hex.fulfillment != Hex.Fulfillment.FULFILLED:
+					success = false
+				
+				unchecked_hexes.pop_back()
+			HexData.ClueType.PENTAGON:
+				var appearance_counts: Array[int] = get_appearance_counts(hex.pos)
+				
+				var unique_neighbor_count: int = 0
+				
+				for appearance_count in appearance_counts:
+					if appearance_count > 0:
+						unique_neighbor_count += 1
+				
+				if unique_neighbor_count < hex.number:
+					hex.fulfillment = Hex.Fulfillment.UNFULFILLED
+				elif unique_neighbor_count == hex.number:
 					hex.fulfillment = Hex.Fulfillment.FULFILLED
 				else:
 					hex.fulfillment = Hex.Fulfillment.OVERDONE
@@ -460,6 +482,19 @@ func get_group(pos: Vector2i, found: Array[Vector2i] = []) -> Array[Vector2i]:
 			get_group(neighbor_pos, found)
 	
 	return found
+
+
+func get_appearance_counts(pos: Vector2i) -> Array[int]:
+	var appearance_counts: Array[int] = []
+	for i in range(10):
+		appearance_counts.append(0)
+	
+	for neighbor_pos in get_neighbors(pos):
+		var neighbor: Hex = grid_hexes[neighbor_pos]
+		if neighbor.number > 0:
+			appearance_counts[neighbor.number - 1] += 1
+	
+	return appearance_counts
 
 
 func get_neighbors(pos: Vector2i) -> Array[Vector2i]:

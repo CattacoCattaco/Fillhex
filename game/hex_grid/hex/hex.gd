@@ -248,6 +248,10 @@ func _draw() -> void:
 				var rect := Rect2(start_x, start_y, width, height)
 				
 				draw_rect(rect, BLACK, false, line_thickness)
+			HexData.ClueType.PENTAGON:
+				var points: PackedVector2Array
+				points = get_regular_polygon(hex_center, text_width * 1.25, 5)
+				draw_polyline(points, BLACK, line_thickness)
 
 
 func _input(event: InputEvent) -> void:
@@ -359,6 +363,12 @@ func _input(event: InputEvent) -> void:
 						if number == 0:
 							number = 10
 					
+					clue_type = HexData.ClueType.DEFAULT
+		elif event.is_action_pressed("hex_pentagon"):
+			if is_tool:
+				if clue_type != HexData.ClueType.PENTAGON:
+					clue_type = HexData.ClueType.PENTAGON
+				else:
 					clue_type = HexData.ClueType.DEFAULT
 		elif event.is_action_pressed("hex_bottom_right"):
 			if is_tool:

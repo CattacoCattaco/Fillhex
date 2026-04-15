@@ -6,6 +6,7 @@ enum ClueType {
 	CIRCLE,
 	TRIANGLE,
 	RECTANGLE,
+	PENTAGON,
 }
 
 @export var number: int
