@@ -2,6 +2,15 @@
 class_name HexGrid
 extends Control
 
+enum Orthogonal {
+	UP_LEFT,
+	UP,
+	UP_RIGHT,
+	DOWN_RIGHT,
+	DOWN,
+	DOWN_LEFT,
+}
+
 const ORTHOGONALS: Array[Vector2i] = [
 	Vector2i(-1, 1),
 	Vector2i(0, 1),
@@ -167,6 +176,7 @@ func display() -> void:
 		hex.state = Hex.State.NORMAL
 		hex.given = hex_data[pos].given
 		hex.clue_type = hex_data[pos].clue_type
+		hex.borders = hex_data[pos].borders
 		
 		if hex.is_selected():
 			selected_hex = hex
@@ -453,11 +463,14 @@ func get_group(pos: Vector2i, found: Array[Vector2i] = []) -> Array[Vector2i]:
 
 
 func get_neighbors(pos: Vector2i) -> Array[Vector2i]:
+	var hex: Hex = grid_hexes[pos]
+	
 	var neighbors: Array[Vector2i] = []
 	
-	for direction in ORTHOGONALS:
-		if grid_hexes.has(pos + direction):
-			neighbors.append(pos + direction)
+	for direction in len(ORTHOGONALS):
+		var dir_vec: Vector2i = ORTHOGONALS[direction]
+		if grid_hexes.has(pos + dir_vec) and not (hex.borders >> direction) & 1:
+			neighbors.append(pos + dir_vec)
 	
 	return neighbors
 

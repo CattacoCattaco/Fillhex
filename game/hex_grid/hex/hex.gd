@@ -66,14 +66,14 @@ const SELECTED_COLORS: Array[Color] = [
 ]
 
 const BLACK := Color.BLACK
-const GOOD_COLOR := Color(0.52, 1.0, 0.52, 1.0)
-const BAD_COLOR := Color(1.0, 0.3, 0.417, 1.0)
+const GOOD_COLOR := Color(0.52, 1.0, 0.52)
+const BAD_COLOR := Color(1.0, 0.3, 0.42)
+const BORDER_COLOR := Color(0.94, 0.38, 0.28)
 
 const END_SHADERS: Array[Shader] = [
 	preload("res://game/hex_grid/hex/end_shaders/green.gdshader"),
 	preload("res://game/hex_grid/hex/end_shaders/dissolve.gdshader"),
 ]
-
 
 @export var number: int = 1:
 	set(value):
@@ -100,6 +100,26 @@ const END_SHADERS: Array[Shader] = [
 		clue_type = value
 		if not hex_grid.in_setup:
 			hex_grid.hex_data[pos].clue_type = value
+		queue_redraw()
+		tween_to_state()
+		
+		if not is_tool:
+			hex_grid.check_for_solution()
+		elif not hex_grid.in_setup:
+			hex_grid.save_level()
+
+@export_flags(
+		"Top Left",
+		"Top",
+		"Top Right",
+		"Bottom Right",
+		"Bottom",
+		"Bottom Left",
+		) var borders: int = 0:
+	set(value):
+		borders = value
+		if not hex_grid.in_setup:
+			hex_grid.hex_data[pos].borders = value
 		queue_redraw()
 		tween_to_state()
 		
@@ -171,6 +191,15 @@ func _draw() -> void:
 	draw_colored_polygon(corners, color, uvs)
 	
 	#draw_polyline(corners, BLACK, max(scale_factor * 0.1, 3))
+	
+	if borders:
+		var border_points := PackedVector2Array()
+		for i in len(HexGrid.ORTHOGONALS):
+			if (borders >> i) & 1:
+				border_points.append_array(get_border_points(i as HexGrid.Orthogonal))
+		
+		var border_thickness: float = max(scale_factor * 0.07, 2.5)
+		draw_multiline(border_points, BORDER_COLOR, border_thickness)
 	
 	if number > 0:
 		var font: Font = get_theme_default_font()
@@ -331,6 +360,24 @@ func _input(event: InputEvent) -> void:
 							number = 10
 					
 					clue_type = HexData.ClueType.DEFAULT
+		elif event.is_action_pressed("hex_bottom_right"):
+			if is_tool:
+				flip_border(HexGrid.Orthogonal.DOWN_RIGHT, HexGrid.Orthogonal.UP_LEFT)
+		elif event.is_action_pressed("hex_bottom"):
+			if is_tool:
+				flip_border(HexGrid.Orthogonal.DOWN, HexGrid.Orthogonal.UP)
+		elif event.is_action_pressed("hex_bottom_left"):
+			if is_tool:
+				flip_border(HexGrid.Orthogonal.DOWN_LEFT, HexGrid.Orthogonal.UP_RIGHT)
+		elif event.is_action_pressed("hex_top_left"):
+			if is_tool:
+				flip_border(HexGrid.Orthogonal.UP_LEFT, HexGrid.Orthogonal.DOWN_RIGHT)
+		elif event.is_action_pressed("hex_top"):
+			if is_tool:
+				flip_border(HexGrid.Orthogonal.UP, HexGrid.Orthogonal.DOWN)
+		elif event.is_action_pressed("hex_top_right"):
+			if is_tool:
+				flip_border(HexGrid.Orthogonal.UP_RIGHT, HexGrid.Orthogonal.DOWN_LEFT)
 
 
 func _gui_input(event: InputEvent) -> void:
@@ -455,6 +502,33 @@ func get_regular_polygon(center: Vector2, apothem: float, side_count: int) -> Pa
 	return points
 
 
+func get_border_points(side: HexGrid.Orthogonal) -> PackedVector2Array:
+	var scale_factor: float = get_scale_factor()
+	var points := PackedVector2Array()
+	
+	match side:
+		HexGrid.Orthogonal.UP_LEFT:
+			points.append(Vector2(0, scale_factor * sqrt(3) / 2))
+			points.append(Vector2(scale_factor / 2, 0))
+		HexGrid.Orthogonal.UP:
+			points.append(Vector2(scale_factor / 2, 0))
+			points.append(Vector2(3 * scale_factor / 2, 0))
+		HexGrid.Orthogonal.UP_RIGHT:
+			points.append(Vector2(3 * scale_factor / 2, 0))
+			points.append(Vector2(2 * scale_factor, scale_factor * sqrt(3) / 2))
+		HexGrid.Orthogonal.DOWN_RIGHT:
+			points.append(Vector2(2 * scale_factor, scale_factor * sqrt(3) / 2))
+			points.append(Vector2(3 * scale_factor / 2, scale_factor * sqrt(3)))
+		HexGrid.Orthogonal.DOWN:
+			points.append(Vector2(3 * scale_factor / 2, scale_factor * sqrt(3)))
+			points.append(Vector2(scale_factor / 2, scale_factor * sqrt(3)))
+		HexGrid.Orthogonal.DOWN_LEFT:
+			points.append(Vector2(scale_factor / 2, scale_factor * sqrt(3)))
+			points.append(Vector2(0, scale_factor * sqrt(3) / 2))
+	
+	return points
+
+
 func tween_to_state() -> void:
 	if zoom_tween:
 		zoom_tween.kill()
@@ -537,3 +611,14 @@ func is_selected() -> bool:
 func set_shader_time(time: float) -> void:
 	var shader_material: ShaderMaterial = material
 	shader_material.set_shader_parameter("time", time)
+
+
+func flip_border(direction: HexGrid.Orthogonal, inverse: HexGrid.Orthogonal) -> void:
+	var neighbor_pos: Vector2i = pos + HexGrid.ORTHOGONALS[direction]
+	if neighbor_pos not in hex_grid.grid_hexes:
+		return
+	
+	borders ^= 1 << direction
+	var neighbor: Hex = hex_grid.grid_hexes[neighbor_pos]
+	if (borders >> direction) & 1 != (neighbor.borders >> inverse) & 1:
+		neighbor.borders ^= 1 << inverse

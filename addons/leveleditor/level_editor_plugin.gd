@@ -28,9 +28,10 @@ func _has_main_screen():
 
 func _edit(object: Object) -> void:
 	if object is LevelData:
+		var levels: Array[LevelData] = main_panel_instance.level_manager.levels
 		var level_num: int = object.resource_path.to_int()
 		
-		if level_num >= len(main_panel_instance.level_manager.levels):
+		if level_num >= len(levels) or levels[level_num] != object:
 			main_panel_instance.level_manager.find_levels()
 		
 		main_panel_instance.level_manager.load_level(level_num)
