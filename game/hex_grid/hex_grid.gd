@@ -281,7 +281,7 @@ func check_for_solution() -> void:
 				
 				for neighbor_pos in get_neighbors(hex.pos):
 					var neighbor: Hex = grid_hexes[neighbor_pos]
-					if neighbor.number > 0:
+					if neighbor.number > 0 and neighbor.clue_type == HexData.ClueType.DEFAULT:
 						sum += neighbor.number
 				
 				if sum < hex.number:
@@ -491,7 +491,7 @@ func get_appearance_counts(pos: Vector2i) -> Array[int]:
 	
 	for neighbor_pos in get_neighbors(pos):
 		var neighbor: Hex = grid_hexes[neighbor_pos]
-		if neighbor.number > 0:
+		if neighbor.number > 0 and neighbor.clue_type == HexData.ClueType.DEFAULT:
 			appearance_counts[neighbor.number - 1] += 1
 	
 	return appearance_counts

@@ -15,6 +15,9 @@ script = ExtResource("1_hm70j")
 [sub_resource type="Resource" id="Resource_n3xfs"]
 script = ExtResource("1_hm70j")
 
+[sub_resource type="Resource" id="Resource_kyr1y"]
+script = ExtResource("1_hm70j")
+
 [sub_resource type="Resource" id="Resource_m05ac"]
 script = ExtResource("1_hm70j")
 number = 1
@@ -36,6 +39,9 @@ number = 2
 given = true
 clue_type = 4
 
+[sub_resource type="Resource" id="Resource_bhy7j"]
+script = ExtResource("1_hm70j")
+
 [sub_resource type="Resource" id="Resource_udrgq"]
 script = ExtResource("1_hm70j")
 
@@ -44,6 +50,15 @@ script = ExtResource("1_hm70j")
 
 [sub_resource type="Resource" id="Resource_gwijb"]
 script = ExtResource("1_hm70j")
+
+[sub_resource type="Resource" id="Resource_cpvf7"]
+script = ExtResource("1_hm70j")
+
+[sub_resource type="Resource" id="Resource_c5q0y"]
+script = ExtResource("1_hm70j")
+number = 1
+given = true
+clue_type = 4
 
 [sub_resource type="Resource" id="Resource_1882m"]
 script = ExtResource("1_hm70j")
@@ -57,21 +72,6 @@ script = ExtResource("1_hm70j")
 [sub_resource type="Resource" id="Resource_qit02"]
 script = ExtResource("1_hm70j")
 metadata/_custom_type_script = "uid://c6v7pw3whrr78"
-
-[sub_resource type="Resource" id="Resource_bhy7j"]
-script = ExtResource("1_hm70j")
-
-[sub_resource type="Resource" id="Resource_c5q0y"]
-script = ExtResource("1_hm70j")
-number = 1
-given = true
-clue_type = 4
-
-[sub_resource type="Resource" id="Resource_cpvf7"]
-script = ExtResource("1_hm70j")
-
-[sub_resource type="Resource" id="Resource_kyr1y"]
-script = ExtResource("1_hm70j")
 
 [resource]
 script = ExtResource("2_tupss")

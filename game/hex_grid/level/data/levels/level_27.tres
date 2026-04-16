@@ -8,19 +8,33 @@ script = ExtResource("1_kcu2f")
 
 [sub_resource type="Resource" id="Resource_7guvf"]
 script = ExtResource("1_kcu2f")
-number = 7
-given = true
 
 [sub_resource type="Resource" id="Resource_atvyf"]
 script = ExtResource("1_kcu2f")
 
 [sub_resource type="Resource" id="Resource_n3xfs"]
 script = ExtResource("1_kcu2f")
+number = 7
+given = true
 
 [sub_resource type="Resource" id="Resource_kyr1y"]
 script = ExtResource("1_kcu2f")
 
+[sub_resource type="Resource" id="Resource_m05ac"]
+script = ExtResource("1_kcu2f")
+
 [sub_resource type="Resource" id="Resource_bt54i"]
+script = ExtResource("1_kcu2f")
+number = 7
+given = true
+
+[sub_resource type="Resource" id="Resource_serg2"]
+script = ExtResource("1_kcu2f")
+number = 3
+given = true
+clue_type = 4
+
+[sub_resource type="Resource" id="Resource_1mooc"]
 script = ExtResource("1_kcu2f")
 
 [sub_resource type="Resource" id="Resource_bhy7j"]
@@ -41,11 +55,19 @@ clue_type = 4
 [sub_resource type="Resource" id="Resource_gwijb"]
 script = ExtResource("1_kcu2f")
 
+[sub_resource type="Resource" id="Resource_cpvf7"]
+script = ExtResource("1_kcu2f")
+
+[sub_resource type="Resource" id="Resource_c5q0y"]
+script = ExtResource("1_kcu2f")
+
 [sub_resource type="Resource" id="Resource_1882m"]
 script = ExtResource("1_kcu2f")
 
 [sub_resource type="Resource" id="Resource_1k3u3"]
 script = ExtResource("1_kcu2f")
+number = 2
+given = true
 
 [sub_resource type="Resource" id="Resource_17td5"]
 script = ExtResource("1_kcu2f")
@@ -54,25 +76,9 @@ given = true
 
 [sub_resource type="Resource" id="Resource_qit02"]
 script = ExtResource("1_kcu2f")
-metadata/_custom_type_script = "uid://c6v7pw3whrr78"
-
-[sub_resource type="Resource" id="Resource_serg2"]
-script = ExtResource("1_kcu2f")
-number = 3
+number = 2
 given = true
-clue_type = 4
-
-[sub_resource type="Resource" id="Resource_1mooc"]
-script = ExtResource("1_kcu2f")
-
-[sub_resource type="Resource" id="Resource_m05ac"]
-script = ExtResource("1_kcu2f")
-
-[sub_resource type="Resource" id="Resource_c5q0y"]
-script = ExtResource("1_kcu2f")
-
-[sub_resource type="Resource" id="Resource_cpvf7"]
-script = ExtResource("1_kcu2f")
+metadata/_custom_type_script = "uid://c6v7pw3whrr78"
 
 [resource]
 script = ExtResource("2_p55c4")

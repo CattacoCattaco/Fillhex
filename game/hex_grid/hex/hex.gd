@@ -294,7 +294,7 @@ func _input(event: InputEvent) -> void:
 				number = 10
 			else:
 				number = number % 10 + 40
-		elif event.is_action_pressed("hex_20s"):
+		elif event.is_action_pressed("hex_50s"):
 			if not (is_tool and clue_type == HexData.ClueType.RECTANGLE):
 				return
 			

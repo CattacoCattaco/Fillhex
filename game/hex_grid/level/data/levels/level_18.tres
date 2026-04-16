@@ -9,6 +9,12 @@ script = ExtResource("1_yty02")
 [sub_resource type="Resource" id="Resource_7guvf"]
 script = ExtResource("1_yty02")
 
+[sub_resource type="Resource" id="Resource_atvyf"]
+script = ExtResource("1_yty02")
+number = 2
+given = true
+clue_type = 2
+
 [sub_resource type="Resource" id="Resource_n3xfs"]
 script = ExtResource("1_yty02")
 
@@ -23,6 +29,12 @@ script = ExtResource("1_yty02")
 
 [sub_resource type="Resource" id="Resource_bt54i"]
 script = ExtResource("1_yty02")
+
+[sub_resource type="Resource" id="Resource_serg2"]
+script = ExtResource("1_yty02")
+number = 2
+given = true
+clue_type = 2
 
 [sub_resource type="Resource" id="Resource_1mooc"]
 script = ExtResource("1_yty02")
@@ -62,24 +74,12 @@ script = ExtResource("1_yty02")
 [sub_resource type="Resource" id="Resource_17td5"]
 script = ExtResource("1_yty02")
 
-[sub_resource type="Resource" id="Resource_atvyf"]
-script = ExtResource("1_yty02")
-number = 2
-given = true
-clue_type = 2
-
 [sub_resource type="Resource" id="Resource_qit02"]
 script = ExtResource("1_yty02")
 number = 2
 given = true
 clue_type = 2
 metadata/_custom_type_script = "uid://c6v7pw3whrr78"
-
-[sub_resource type="Resource" id="Resource_serg2"]
-script = ExtResource("1_yty02")
-number = 2
-given = true
-clue_type = 2
 
 [resource]
 script = ExtResource("2_g4qxb")

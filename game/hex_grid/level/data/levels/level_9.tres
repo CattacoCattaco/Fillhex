@@ -132,7 +132,6 @@ given = true
 [sub_resource type="Resource" id="Resource_7lx4s"]
 script = ExtResource("1_jll01")
 number = 5
-state = 2
 given = true
 
 [sub_resource type="Resource" id="Resource_qhpnu"]
