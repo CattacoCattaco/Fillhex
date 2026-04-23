@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://0ovie21sawiv"]
 
-[ext_resource type="Shader" uid="uid://2uncc3cxryrs" path="res://game/hex_grid/hex/end_shaders/dissolve.gdshader" id="1_0npca"]
-[ext_resource type="Script" uid="uid://iyhu8lg46teu" path="res://game/hex_grid/hex/hex.gd" id="1_py0ip"]
+[ext_resource type="Shader" uid="uid://2uncc3cxryrs" path="res://hex_display/hex/end_shaders/dissolve.gdshader" id="1_0npca"]
+[ext_resource type="Script" uid="uid://iyhu8lg46teu" path="res://hex_display/hex/hex.gd" id="1_py0ip"]
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_0npca"]
 frequency = 0.0107
@@ -32,4 +32,3 @@ anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 35.0
 script = ExtResource("1_py0ip")
-metadata/_custom_type_script = "uid://iyhu8lg46teu"

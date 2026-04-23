@@ -1,13 +1,6 @@
 @tool
 class_name Hex
-extends Control
-
-enum State {
-	NORMAL,
-	HOVERED,
-	SELECTED,
-	HOVERED_SELECTED,
-}
+extends HexDisplay
 
 enum Fulfillment {
 	UNFULFILLED, # Not fulfilled but still room for fulfillment
@@ -20,73 +13,10 @@ enum EndShader {
 	DISSOLVE,
 }
 
-const COLORS: Array[Color] = [
-	Color(0.7, 0.7, 0.7),
-	Color(1, 0.6, 0.75),
-	Color(1, 0.7, 0.65),
-	Color(1, 0.9, 0.7),
-	Color(0.7, 1, 0.7),
-	Color(0.5, 1, 0.8),
-	Color(0.5, 0.9, 1),
-	Color(0.55, 0.75, 1),
-	Color(0.7, 0.7, 1),
-	Color(0.85, 0.65, 1),
-	Color(1, 0.7, 0.9),
-	Color(1.0, 0.5, 0.85),
-]
-
-const HOVERED_COLORS: Array[Color] = [
-	Color(0.55, 0.55, 0.55),
-	Color(0.8, 0.48, 0.5),
-	Color(0.8, 0.56, 0.52),
-	Color(0.8, 0.72, 0.52),
-	Color(0.52, 0.8, 0.52),
-	Color(0.4, 0.8, 0.64),
-	Color(0.4, 0.72, 0.8),
-	Color(0.44, 0.6, 0.8),
-	Color(0.56, 0.56, 0.8),
-	Color(0.68, 0.52, 0.8),
-	Color(0.8, 0.56, 0.72),
-	Color(0.8, 0.4, 0.68),
-]
-
-const SELECTED_COLORS: Array[Color] = [
-	Color(0.4, 0.4, 0.4),
-	Color(0.64, 0.384, 0.4),
-	Color(0.64, 0.448, 0.416),
-	Color(0.64, 0.576, 0.416),
-	Color(0.416, 0.64, 0.416),
-	Color(0.32, 0.64, 0.512),
-	Color(0.32, 0.576, 0.64),
-	Color(0.352, 0.48, 0.64),
-	Color(0.448, 0.448, 0.64),
-	Color(0.544, 0.416, 0.64),
-	Color(0.64, 0.448, 0.576),
-	Color(0.64, 0.32, 0.544),
-]
-
-const BLACK := Color.BLACK
-const GOOD_COLOR := Color(0.52, 1.0, 0.52)
-const BAD_COLOR := Color(1.0, 0.3, 0.42)
-const BORDER_COLOR := Color(0.94, 0.38, 0.28)
-
 const END_SHADERS: Array[Shader] = [
-	preload("res://game/hex_grid/hex/end_shaders/green.gdshader"),
-	preload("res://game/hex_grid/hex/end_shaders/dissolve.gdshader"),
+	preload("res://hex_display/hex/end_shaders/green.gdshader"),
+	preload("res://hex_display/hex/end_shaders/dissolve.gdshader"),
 ]
-
-@export var number: int = 1:
-	set(value):
-		number = value
-		if not hex_grid.in_setup:
-			hex_grid.hex_data[pos].number = number
-		queue_redraw()
-		tween_to_state()
-		
-		if not is_tool:
-			hex_grid.check_for_solution()
-		elif not hex_grid.in_setup:
-			hex_grid.save_level()
 
 @export var given: bool = true:
 	set(value):
@@ -128,51 +58,13 @@ const END_SHADERS: Array[Shader] = [
 		elif not hex_grid.in_setup:
 			hex_grid.save_level()
 
-@export var update: bool = false:
-	set(value):
-		update = false
-		queue_redraw()
-
-
-@onready var color: Color = get_state_color(state):
-	set(value):
-		color = value
-		queue_redraw()
-
-
-var state: State = State.NORMAL:
-	set(value):
-		if about_to_free:
-			return
-		
-		if hex_grid.in_end:
-			if state == State.NORMAL:
-				return
-			
-			state = State.NORMAL
-			queue_redraw()
-			return
-		
-		state = value
-		hex_grid.hex_data[pos].state = state
-		
-		queue_redraw()
-
 var fulfillment: Fulfillment = Fulfillment.UNFULFILLED:
 	set(value):
 		fulfillment = value
 		queue_redraw()
 
-var zoom_factor: float = 1.0:
-	set(value):
-		zoom_factor = value
-		queue_redraw()
-
-var zoom_tween: Tween
-
 var hex_grid: HexGrid
 var pos: Vector2i
-var is_tool: bool = false
 
 var about_to_free: bool = false
 
@@ -183,14 +75,9 @@ func _ready() -> void:
 
 
 func _draw() -> void:
+	super()
+	
 	var scale_factor: float = get_scale_factor()
-	
-	var corners: PackedVector2Array = get_hex_zoomed()
-	var uvs: PackedVector2Array = get_uvs()
-	
-	draw_colored_polygon(corners, color, uvs)
-	
-	#draw_polyline(corners, BLACK, max(scale_factor * 0.1, 3))
 	
 	if borders:
 		var border_points := PackedVector2Array()
@@ -209,19 +96,6 @@ func _draw() -> void:
 		
 		var hex_center := Vector2(scale_factor, scale_factor * sqrt(3) / 2)
 		var text_pos := Vector2(hex_center.x - text_width / 2.0, hex_center.y + font_size / 2.0 - 4)
-		
-		var text_color: Color = BLACK
-		if fulfillment == Fulfillment.FULFILLED:
-			text_color = GOOD_COLOR
-		elif fulfillment == Fulfillment.OVERDONE:
-			text_color = BAD_COLOR
-		
-		draw_string(font, text_pos, str(number), HORIZONTAL_ALIGNMENT_LEFT, -1, font_size,
-				text_color)
-		
-		if text_color != BLACK:
-			draw_string_outline(font, text_pos, str(number), HORIZONTAL_ALIGNMENT_LEFT, -1,
-					font_size, 3, BLACK)
 		
 		var line_thickness: float = max(scale_factor * 0.06, 2)
 		if given:
@@ -393,45 +267,24 @@ func _input(event: InputEvent) -> void:
 		get_viewport().set_input_as_handled()
 
 
-func _gui_input(event: InputEvent) -> void:
-	if event is InputEventMouseButton:
-		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
-			if number == -1:
-				number = 0
-			elif is_tool or not given:
-				select_deselect()
-			elif hex_grid.selected_hex:
-				hex_grid.selected_hex.select_deselect()
-		elif event.button_index == MOUSE_BUTTON_RIGHT and event.pressed:
-			if is_tool:
-				number = -1
-			elif not given:
-				number = 0
-	elif event is InputEventMouseMotion:
-		if Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
-			hex_grid.offset += event.relative
+func _left_clicked() -> void:
+	if number == -1:
+		number = 0
+	elif is_tool or not given:
+		select_deselect()
+	elif hex_grid.selected_hex:
+		hex_grid.selected_hex.select_deselect()
 
 
-func _mouse_entered() -> void:
-	if state == State.NORMAL:
-		state = State.HOVERED
-	elif state == State.SELECTED:
-		state = State.HOVERED_SELECTED
-	
-	tween_to_state()
+func _right_clicked() -> void:
+	if is_tool:
+		number = -1
+	elif not given:
+		number = 0
 
 
-func _mouse_exited() -> void:
-	if state == State.HOVERED:
-		state = State.NORMAL
-	elif state == State.HOVERED_SELECTED:
-		state = State.SELECTED
-	
-	tween_to_state()
-
-
-func _has_point(point: Vector2) -> bool:
-	return Geometry2D.is_point_in_polygon(point, get_hex_zoomed())
+func _dragged(event: InputEventMouseMotion) -> void:
+	hex_grid.offset += event.relative
 
 
 func select_deselect() -> void:
@@ -461,45 +314,6 @@ func select_deselect() -> void:
 			hex_grid.selected_hex = self
 	
 	tween_to_state()
-
-
-func get_hex() -> PackedVector2Array:
-	var scale_factor: float = get_scale_factor()
-	
-	return PackedVector2Array([
-		Vector2(scale_factor / 2, 0),
-		Vector2(3 * scale_factor / 2, 0),
-		Vector2(scale_factor * 2, scale_factor * sqrt(3) / 2),
-		Vector2(3 * scale_factor / 2, scale_factor * sqrt(3)),
-		Vector2(scale_factor / 2, scale_factor * sqrt(3)),
-		Vector2(0, scale_factor * sqrt(3) / 2),
-		Vector2(scale_factor / 2, 0),
-	])
-
-
-func get_uvs() -> PackedVector2Array:
-	return PackedVector2Array([
-		Vector2(1 / 4.0, 0),
-		Vector2(3 / 4.0, 0),
-		Vector2(1, 1 / 2.0),
-		Vector2(3 / 4.0, 1),
-		Vector2(1 / 4.0, 1),
-		Vector2(0, 1 / 2.0),
-		Vector2(1 / 4.0, 0),
-	])
-
-
-func get_hex_zoomed() -> PackedVector2Array:
-	var scale_factor: float = get_scale_factor()
-	
-	var offset := Vector2(scale_factor * 2, scale_factor * sqrt(3)) * (1 - zoom_factor) / 2
-	
-	var zoomed: PackedVector2Array = get_hex()
-	
-	for i in len(zoomed):
-		zoomed[i] = zoomed[i] * zoom_factor + offset
-	
-	return zoomed
 
 
 ## Returns the points of a regular polygon for special clues
@@ -542,23 +356,7 @@ func get_border_points(side: HexGrid.Orthogonal) -> PackedVector2Array:
 	return points
 
 
-func tween_to_state() -> void:
-	if zoom_tween:
-		zoom_tween.kill()
-	zoom_tween = create_tween().set_parallel()
-	
-	zoom_tween.tween_property(self, "color", get_state_color(state), 0.1)
-	zoom_tween.tween_property(self, "zoom_factor", get_state_zoom(state), 0.15)
-	z_index = get_state_z(state)
-
-
-func display_state() -> void:
-	color = get_state_color(state)
-	zoom_factor = get_state_zoom(state)
-	z_index = get_state_z(state)
-
-
-func get_state_color(_state) -> Color:
+func _get_state_color(_state: State) -> Color:
 	match _state:
 		State.NORMAL:
 			if number == -1:
@@ -591,34 +389,13 @@ func get_state_color(_state) -> Color:
 	return BLACK
 
 
-func get_state_zoom(_state) -> float:
-	match _state:
-		State.NORMAL:
-			return 0.9
-		State.SELECTED, State.HOVERED_SELECTED, State.HOVERED:
-			return 0.925
-	
-	return 0.9
-
-
-func get_state_z(_state) -> int:
-	match _state:
-		State.NORMAL:
-			return 0
-		State.HOVERED:
-			return 5
-		State.SELECTED, State.HOVERED_SELECTED:
-			return 10
-	
-	return 1
-
-
-func get_scale_factor() -> float:
-	return min(size.x / 2, size.y / sqrt(3))
-
-
-func is_selected() -> bool:
-	return state in [State.SELECTED, State.HOVERED_SELECTED]
+func _get_text_color() -> Color:
+	if fulfillment == Fulfillment.UNFULFILLED:
+		return BLACK
+	elif fulfillment == Fulfillment.FULFILLED:
+		return GOOD_COLOR
+	else:
+		return BAD_COLOR
 
 
 func set_shader_time(time: float) -> void:

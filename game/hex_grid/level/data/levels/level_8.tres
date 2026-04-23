@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="LevelData" format=3 uid="uid://kaqfwn5ghspm"]
 
 [ext_resource type="Script" uid="uid://hu5ar83kekht" path="res://game/hex_grid/level/data/level_data.gd" id="1_rp3ge"]
-[ext_resource type="Script" uid="uid://c6v7pw3whrr78" path="res://game/hex_grid/hex/hex_state/hex_data.gd" id="1_yyfrt"]
+[ext_resource type="Script" uid="uid://c6v7pw3whrr78" path="res://hex_display/hex/hex_state/hex_data.gd" id="1_yyfrt"]
 
 [sub_resource type="Resource" id="Resource_nfplo"]
 script = ExtResource("1_yyfrt")
